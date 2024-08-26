@@ -244,75 +244,75 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 })(jQuery);
 
-// Translation Validation
-function validateTranslation() {
-  const fileInput = document.getElementById('documentUpload');
-  const targetLanguages = document.querySelectorAll('input[name="dropdown-group"]:checked');
-  const summarizeLabel = document.getElementById('summarizeLabel');
+// // Translation Validation
+// function validateTranslation() {
+//   const fileInput = document.getElementById('documentUpload');
+//   const targetLanguages = document.querySelectorAll('input[name="dropdown-group"]:checked');
+//   const summarizeLabel = document.getElementById('summarizeLabel');
 
-  if (!fileInput.files.length) {
-      alert('Please upload a document before starting the translation.');
-      return false;
-  }
+//   if (!fileInput.files.length) {
+//       alert('Please upload a document before starting the translation.');
+//       return false;
+//   }
 
-  if (targetLanguages.length === 0) {
-      alert('Please select at least one target language.');
-      return false;
-  }
+//   if (targetLanguages.length === 0) {
+//       alert('Please select at least one target language.');
+//       return false;
+//   }
 
-  if (summarizeLabel.textContent !== 'Summarised!') {
-      alert('Please wait for the summary process to complete before starting the translation.');
-      return false;
-  }
+//   if (summarizeLabel.textContent !== 'Summarised!') {
+//       alert('Please wait for the summary process to complete before starting the translation.');
+//       return false;
+//   }
 
-  return true;
-}
-
-
+//   return true;
+// }
 
 
-function startProgress() {
-  if (!validateTranslation()) {
-      return;
-  }
 
-  let progressBar = document.querySelector(".circular-progress");
-  let valueContainer = document.querySelector(".value-container");
-  let tickImg = document.querySelector(".tick-img");
-  let translatedDocuments = document.getElementById('translatedDocuments');
 
-  let progressValue = 0;
-  let progressEndValue = 100;
-  let duration = 120; // 2 minutes in milliseconds
-  let intervalTime = 100; // Update every 100 milliseconds
+// function startProgress() {
+//   if (!validateTranslation()) {
+//       return;
+//   }
 
-  let totalUpdates = duration / intervalTime;
-  let increment = progressEndValue / totalUpdates;
+//   let progressBar = document.querySelector(".circular-progress");
+//   let valueContainer = document.querySelector(".value-container");
+//   let tickImg = document.querySelector(".tick-img");
+//   let translatedDocuments = document.getElementById('translatedDocuments');
 
-  clearInterval(window.progress);
+//   let progressValue = 0;
+//   let progressEndValue = 100;
+//   let duration = 120; // 2 minutes in milliseconds
+//   let intervalTime = 100; // Update every 100 milliseconds
 
-  let submitButton = document.querySelector(".submitbutton");
-  submitButton.disabled = true;
+//   let totalUpdates = duration / intervalTime;
+//   let increment = progressEndValue / totalUpdates;
 
-  translatedDocuments.style.display = 'none'; // Hide the translated documents section until translation is complete
+//   clearInterval(window.progress);
 
-  window.progress = setInterval(() => {
-      progressValue += increment;
-      if (progressValue >= progressEndValue) {
-          progressValue = progressEndValue;
-          clearInterval(window.progress);
-          progressBar.style.display = 'none';
-          tickImg.style.display = 'block';
+//   let submitButton = document.querySelector(".submitbutton");
+//   submitButton.disabled = true;
 
-          displayTranslatedDocuments(); // Display translated documents after completion
-      }
-      valueContainer.textContent = `${Math.round(progressValue)}%`;
-      progressBar.style.background = `conic-gradient(
-          #f7d035 ${progressValue * 3.6}deg,
-          #f7f7f7 ${progressValue * 3.6}deg
-      )`;
-  }, intervalTime);
-}
+//   translatedDocuments.style.display = 'none'; // Hide the translated documents section until translation is complete
+
+//   window.progress = setInterval(() => {
+//       progressValue += increment;
+//       if (progressValue >= progressEndValue) {
+//           progressValue = progressEndValue;
+//           clearInterval(window.progress);
+//           progressBar.style.display = 'none';
+//           tickImg.style.display = 'block';
+
+//           displayTranslatedDocuments(); // Display translated documents after completion
+//       }
+//       valueContainer.textContent = `${Math.round(progressValue)}%`;
+//       progressBar.style.background = `conic-gradient(
+//           #f7d035 ${progressValue * 3.6}deg,
+//           #f7f7f7 ${progressValue * 3.6}deg
+//       )`;
+//   }, intervalTime);
+// }
 
 function displayTranslatedDocuments() {
   const targetLanguages = document.querySelectorAll('input[name="dropdown-group"]:checked');

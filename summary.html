@@ -125,7 +125,8 @@
                                 </div>
                                 <div id="selectedLanguages">Selected Languages: None</div>
 
-                              
+                                <button type="button" id="startTranslateBtn" class="submitbutton" onclick="startTranslation()">Start Translating</button>
+                                <div class="tick-mark"></div>
                         </div>
 
                         <div class="container">
@@ -136,8 +137,7 @@
                                 <img src="check.png" alt="Completed" class="tick-img" style="display: none;">
                             </div>
                         </div>
-                        <button type="button" id="startTranslateBtn" class="submitbutton" onclick="startTranslation()">Start Translating</button>
-                        <div class="tick-mark"></div>
+                        
                     </form>
                 </div>
             </div>
@@ -292,6 +292,22 @@ async function detectLanguage(text) {
         console.error('Error detecting language:', error);
     }
 }
+function startSummarization() {
+    let progressValue = 0;
+    let progressEndValue = 100;
+    let intervalTime = 100; // Adjust as needed
+
+    let summarizationProgress = setInterval(() => {
+        progressValue += 1;
+        document.querySelector('.summarization-progress').style.width = `${progressValue}%`;
+        
+        if (progressValue >= progressEndValue) {
+            clearInterval(summarizationProgress);
+            document.getElementById('summarizeLabel').textContent = 'Summarized!'; // Set the label to indicate completion
+        }
+    }, intervalTime);
+}
+    
 
 function startProgress() {
     let progressBar = document.querySelector(".circular-progress");
@@ -325,25 +341,53 @@ function startProgress() {
 }
 
 async function startTranslation() {
-    startProgress(); // Start the progress bar as soon as the translation starts
-
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
-    const selectedLanguages = getSelectedLanguages();
+    const selectedLanguages = getSelectedLanguages(); // This holds the selected languages
+    const summarizeLabel = document.getElementById('summarizeLabel'); // Assuming you have this label
 
+    // Check if the file is uploaded
     if (!file) {
         alert("Please upload a file before starting the translation.");
         return;
     }
 
+    // Check if at least one language is selected
     if (selectedLanguages.length === 0) {
         alert("Please select at least one target language.");
         return;
     }
 
-    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
+    // Check if summarization is complete
+    // if (summarizeLabel.textContent !== 'Summarized!') {
+    //     alert('Please wait for the summary process to complete before starting the translation.');
+    //     return;
+    // }
+
+    // Now, all conditions are met, start the progress bar
+    startProgress(); 
+
+
+// Continue with translation logic here
+const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
+
+    // Add the translated text and ready message
+    const isSingleDocument = selectedLanguages.length === 1;
+    const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
+    const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
+
+    const title = document.createElement('h3');
+    title.className = 'translated-title';
+    title.textContent = translatedText;
+
+    const readyMessage = document.createElement('div');
+    readyMessage.className = 'ready-msg';
+    readyMessage.textContent = readyMessageText;
+
+    translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
+    translatedDocuments.appendChild(readyMessage);
 
     for (const language of selectedLanguages) {
         const formData = new FormData();
@@ -360,14 +404,14 @@ async function startTranslation() {
                 const data = await response.json();
                 const blob = new Blob([data.summary], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
-                
+
                 // Create a download link with the document name and language
                 const downloadLink = document.createElement('a');
                 downloadLink.href = url;
                 downloadLink.download = `${fileNameWithoutExtension}_${language}.txt`;
                 downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.txt`;
                 translatedDocuments.appendChild(downloadLink);
-                
+
                 // Add a line break after each download link
                 translatedDocuments.appendChild(document.createElement('br'));
             } else {
@@ -386,11 +430,14 @@ async function startTranslation() {
 }
 
 
+
+
+
 </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="scriptDt.js"></script>
+    <script src="summary.js"></script>
 </body>
 
 </html>
