@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiLexi - Document Translator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styleDT.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+<body>
+    <header class="bg-dark text-black text-center py-2">
+        <div class="row mt-1">
+            <div class="col-md-3">
+                <h1><b>WiLexi</b></h1>
+            </div>
+            <div class="col-md-9 text-right">
+                <img src="wipro.png" alt="logo" width="220px" height="70px">
+            </div>
+        </div>
+    </header>
+
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading text-black">
+                <i class="fas fa-bars" id="menu-toggle"></i>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="Translator.html" class="list-group-item list-group-item-action bg-dark text-black">
+                    <i class="fas fa-language sidebar-icon"></i> <span class="sidebar-text">Translator</span>
+                </a>
+                <a href="summary.html" class="list-group-item list-group-item-action bg-dark text-black">
+                    <i class="fas fa-file-alt sidebar-icon"></i> <span class="sidebar-text">Summary_Translation</span>
+                </a>
+                <a href="history.html" class="list-group-item list-group-item-action bg-dark text-black">
+                    <i class="fas fa-history sidebar-icon"></i> <span class="sidebar-text">History</span>
+                </a>
+                <a href="StarredDocs.html" class="list-group-item list-group-item-action bg-dark text-black">
+                    <i class="fas fa-star sidebar-icon"></i> <span class="sidebar-text">Favorites</span>
+                </a>
+                <a href="analytics.html" class="list-group-item list-group-item-action bg-dark text-black">
+                    <i class="fas fa-chart-pie sidebar-icon"></i> <span class="sidebar-text">Analytics</span>
+                </a>
+                <div class="mt-auto dropdown">
+                    <a href="#" class="list-group-item list-group-item-action bg-dark text-black dropdown-toggle" id="profileLink">
+                        <i class="fas fa-user sidebar-icon"></i> <span class="sidebar-text">Profile</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-up" aria-labelledby="profileLink">
+                        <a class="dropdown-item" href="profile.html">View Profile</a>
+                        <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                
+                <div class="profile-container">
+                    <div class="row">
+                        <div class="col-md-7 content-column">
+                            <div class="text-center">
+                                <img src="profile.png" class="rounded-circle">
+                            </div>
+                            <div class="content-details">
+                                <div class="row mb-3">
+                                    <div class="col-4">Name</div>
+                                    <div class="col-8">DemoUser</div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4">Email</div>
+                                    <div class="col-8">demouser@wipro.com</div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4">Designation</div>
+                                    <div class="col-8">Gen-AI Engineer</div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4">Practice</div>
+                                    <div class="col-8">Digital Work Space Practice</div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4">Domain</div>
+                                    <div class="col-8">Gen-AI Engineering</div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4">Years of Experience</div>
+                                    <div class="col-8">5</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 blank-column">
+                            <!-- Chart -->
+                            <br><h3 style="text-align: center;">User Analytics</h3><br><br>
+                            <div class="chart-container">
+                                
+                                <canvas id="userDashboardChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+           
+
+                
+
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <script>
+        const uploadedDocuments = 10;
+        const selectedLanguages = 5;
+        const starredDocuments = 3;
+
+        const data = {
+            labels: [
+                'Documents Uploaded',
+                'Documents downloaded',
+                'Documents Starred'
+            ],
+            datasets: [{
+                label: 'User Dashboard Data',
+                data: [uploadedDocuments, selectedLanguages, starredDocuments],
+                backgroundColor: [
+                    '#ade8f4', //  for documents uploaded
+                    '#0077b6', //  for languages selected
+                    '#48cae4'  //  for documents starred
+                ],
+                borderColor: [
+                'rgba(102, 153, 178, 0.2)',  /* Darker shade of #ade8f4 */
+                'rgba(0, 59, 115, 0.2)',     /* Darker shade of #0077b6 */
+                'rgba(36, 152, 179, 0.2)'
+            ],
+            borderWidth: 1,
+            hoverOffset: 4
+            }]
+        };
+
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    animateScale: true,
+                    animateRotate: true,
+                    duration: 1500, // Animation duration in milliseconds
+                    easing: 'easeInOutQuad' // Animation easing function
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',  // Position labels below the chart
+                        labels: {
+                            boxWidth: 20,  // Size of the box next to each label
+                            padding: 15   // Padding between labels and chart
+                        }
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    }
+                }
+            }
+        };
+
+        const userDashboardChart = new Chart(
+            document.getElementById('userDashboardChart'),
+            config
+        );
+    </script>
+
+    <footer class="bg-dark text-black text-center py-2">
+        <p>&copy; 2024 - Wipro | <a href="privacy.html" class="text-black">Privacy Policy</a></p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scriptDt.js"></script>
+</body>
+
+</html>

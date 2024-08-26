@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Translator - Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">
+                <img src="wipro.png" alt="logo" width="220px" height="70px">
+            </div>
+            <!-- <div class="vertical-line"></div>
+            <div class="logo-name">Live Workspace<sup>TM</sup></div> -->
+        </div>
+        <div class="web-name">WiLexi</div>
+    </header>
+   
+    <div class="main-content">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Login to WiLexi</h1>
+            </div>
+            <form class="login-form">
+                <div class="input-group">
+                    <label for="username">User Name:</label>
+                    <input type="name" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-button" onclick="validateLogin(event)">Login</button>
+ 
+                <div class="options">
+                    <a href="forgetpw.html" class="forgot-password">Forgot Password?</a>
+                    <a href="register.html" class="register">Register</a>
+                </div>
+            </form>
+            <p id="errorMessage" style="color: red; display: none;">Incorrect username or password</p>
+        </div>
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>
+
+

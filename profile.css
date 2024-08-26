@@ -1,0 +1,142 @@
+
+
+#wrapper {
+    display: flex;
+    width: 100%;
+    margin-top: 10px; /* Adjust this based on the height of your header */
+    margin-bottom: 50px; /* Adjust this based on the height of your footer */
+}
+ 
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: 0;
+    width: 4rem;
+    transition: all 0.25s ease-out;
+    z-index: 1000;
+    position: fixed;
+}
+ 
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+ 
+#sidebar-wrapper .list-group {
+    width: 15rem;
+    padding-left: 0;
+    flex-direction: column;
+    height: 93vh;
+    width: 240px;
+    margin-top: 1rem;
+}
+ 
+#sidebar-wrapper .list-group-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    width: 4rem;
+    transition: all 0.25s ease-out;
+}
+ 
+#sidebar-wrapper .list-group-item .sidebar-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+ 
+#sidebar-wrapper .list-group-item .sidebar-text {
+    display: none;
+}
+ 
+#page-content-wrapper {
+    width: 100%;
+    padding-top: 70px; /* Adjust this based on the height of your header */
+    padding-bottom: 50px; /* Adjust this based on the height of your footer */
+    margin-left: 4rem;
+    transition: all 0.25s ease-out;
+}
+ 
+#wrapper.toggled #sidebar-wrapper {
+    width: 15rem;
+}
+ 
+#wrapper.toggled #sidebar-wrapper .list-group-item {
+    justify-content: flex-start;
+    width: 15rem;
+}
+ 
+#wrapper.toggled #sidebar-wrapper .list-group-item .sidebar-text {
+    display: inline;
+    margin-left: 1rem;
+}
+ 
+#wrapper.toggled #page-content-wrapper {
+    margin-left: 15rem;
+}
+
+.profile-container {  
+    width: 80%; 
+    border: 1px solid #E3E3E3;  
+    /* padding: 0; */
+    margin-top: 5%;  
+    margin-left: 10%;
+    border-radius: 10px;
+    overflow: hidden; 
+    background-color: white; 
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);  
+}  
+  
+.content-column {  
+    background: rgba(0, 59, 115, 0.2); 
+    padding: 20px; 
+    color: white; 
+    border-right: 1px solid #48cae4; 
+    padding-left: 4rem;
+
+}  
+  
+.blank-column {  
+    background: white; 
+}  
+  
+.rounded-circle {  
+    width: 200px;  
+    height: 200px;  
+    margin-top: 20px;  
+    border-radius: 50%;  
+    border: none;  
+    margin-bottom: 20px;
+    margin-right: 4rem;
+}  
+
+.content-details{
+    padding-left: 5rem;
+
+}
+.content-details .row div:first-child {  
+    font-weight: bold;  
+    color: black;  
+    padding-right: 20px;  
+}  
+  
+.content-details .row div:last-child {  
+    color: black;  
+}  
+
+
+/* chart */
+
+.chart-container {
+    position: relative;
+    max-width: 330px;
+    margin: auto;
+}
+
+#userDashboardChart {
+    display: block;
+    width: 100%;
+    height: auto;
+}
