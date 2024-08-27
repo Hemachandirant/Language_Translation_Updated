@@ -116,11 +116,11 @@
                                 <div class="dropdown">
                                     <button class="Target_language" type="button">Select Languages</button>
                                     <div class="dropdown-content" style="display:none;">
-                                        <label><input type="checkbox" name="languages" value="german"> German</label>
-                                        <label><input type="checkbox" name="languages" value="french"> French</label>
-                                        <label><input type="checkbox" name="languages" value="dutch"> Dutch</label>
-                                        <label><input type="checkbox" name="languages" value="mandarin"> Mandarin</label>
-                                        <label><input type="checkbox" name="languages" value="spanish"> Spanish</label>
+                                        <label><input type="checkbox" name="languages" value="German"> German</label>
+                                        <label><input type="checkbox" name="languages" value="French"> French</label>
+                                        <label><input type="checkbox" name="languages" value="Dutch"> Dutch</label>
+                                        <label><input type="checkbox" name="languages" value="Mandarin"> Mandarin</label>
+                                        <label><input type="checkbox" name="languages" value="Spanish"> Spanish</label>
                                     </div>
                                 </div>
                                 <div id="selectedLanguages">Selected Languages: None</div>
@@ -343,27 +343,24 @@ function startProgress() {
 async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
-    const selectedLanguages = getSelectedLanguages(); // This holds the selected languages
+    const selectedLanguages = getSelectedLanguages();
 
-    // Check if the file is uploaded
     if (!file) {
         alert("Please upload a file before starting the translation.");
         return;
     }
 
-    // Check if at least one language is selected
     if (selectedLanguages.length === 0) {
         alert("Please select at least one target language.");
         return;
     }
 
-    // Start the progress bar
     startProgress();
 
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
 
-    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
+    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
 
     const isSingleDocument = selectedLanguages.length === 1;
     const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
@@ -380,10 +377,26 @@ async function startTranslation() {
     translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
     translatedDocuments.appendChild(readyMessage);
 
-    for (const language of selectedLanguages) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("target_lang", language); // Ensure this matches the FastAPI endpoint's expected form field
+    const language_code_mapping = {
+    "German": "deu_Latn",
+    "French": "fra_Latn",
+    "Dutch": "nld_Latn",
+    "Mandarin": "zho_Hans",
+    "Spanish": "spa_Latn"
+};
+
+for (const language of selectedLanguages) {
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    // Map the language to its corresponding code
+    const targetLangCode = language_code_mapping[language];
+    
+    if (targetLangCode) {
+        formData.append("target_lang", targetLangCode);
+    } else {
+        console.error(`Language not found in mapping: ${language}`);
+    }   
 
         try {
             const response = await fetch('http://127.0.0.1:8002/translate-document/', {
@@ -392,17 +405,14 @@ async function startTranslation() {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                const filePath = data.file_path;
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
 
-                // Create a download link with the document name and language
                 const downloadLink = document.createElement('a');
-                downloadLink.href = filePath;
-                downloadLink.download = filePath.split('/').pop(); // Extract the filename from the path
+                downloadLink.href = downloadUrl;
+                downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
                 downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
                 translatedDocuments.appendChild(downloadLink);
-
-                // Add a line break after each download link
                 translatedDocuments.appendChild(document.createElement('br'));
             } else {
                 alert(`Failed to process the file for language: ${language}. Please try again.`);
@@ -412,7 +422,6 @@ async function startTranslation() {
             alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
         }
     }
-
 
     translatedDocuments.style.display = 'block';
   translatedDocuments.style.padding = '40px';
