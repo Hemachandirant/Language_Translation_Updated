@@ -422,7 +422,13 @@ const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); //
             alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
         }
     }
-
+    translatedDocuments.style.display = 'block';
+  translatedDocuments.style.padding = '40px';
+  translatedDocuments.style.borderRadius = '8px';
+  translatedDocuments.style.backgroundColor = '#fff';
+  translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
+  translatedDocuments.style.marginLeft = '20rem';
+  translatedDocuments.style.marginTop = '5rem'; 
     translatedDocuments.style.display = 'block';
     clearInterval(window.progress); // Stop the progress bar
     document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
