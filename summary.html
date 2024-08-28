@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiTrans - Document Translator</title>
+    <title>WiLexi - Document Translator</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styleDT.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -124,6 +124,30 @@
                                     </div>
                                 </div>
                                 <div id="selectedLanguages">Selected Languages: None</div>
+                                
+                                <div class="form-group mt-4">
+                                    <label for="documentFormat">Select Document Format</label><br>
+                                    <div class="dropdown-format" data-control="checkbox-dropdown">
+                                        <label class="dropdown-format-label">Select Format</label>
+                                
+                                        <div class="dropdown-list">
+                                            <label class="dropdown-option">
+                                                <input type="radio" name="format-group" value="pdf" />
+                                                PDF (.pdf)
+                                            </label>
+                                
+                                            <label class="dropdown-option">
+                                                <input type="radio" name="format-group" value="docx" />
+                                                Word (.docx)
+                                            </label>
+                                
+                                            <label class="dropdown-option">
+                                                <input type="radio" name="format-group" value="txt" />
+                                                Text (.txt)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <button type="button" id="startTranslateBtn" class="submitbutton" onclick="startTranslation()">Start Translating</button>
                                 <div class="tick-mark"></div>
@@ -308,7 +332,6 @@ function startSummarization() {
     }, intervalTime);
 }
     
-
 function startProgress() {
     let progressBar = document.querySelector(".circular-progress");
     let valueContainer = document.querySelector(".value-container");
@@ -344,6 +367,7 @@ async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
     const selectedLanguages = getSelectedLanguages(); // This holds the selected languages
+    const documentFormat = getSelectedDocumentFormat(); // This will get the selected document format
     const summarizeLabel = document.getElementById('summarizeLabel'); // Assuming you have this label
 
     // Check if the file is uploaded
@@ -358,6 +382,12 @@ async function startTranslation() {
         return;
     }
 
+    // Check if document format is selected
+    if (!documentFormat) {
+        alert("Please select a document format.");
+        return;
+    }
+
     // Check if summarization is complete
     // if (summarizeLabel.textContent !== 'Summarized!') {
     //     alert('Please wait for the summary process to complete before starting the translation.');
@@ -367,13 +397,10 @@ async function startTranslation() {
     // Now, all conditions are met, start the progress bar
     startProgress(); 
 
-
-// Continue with translation logic here
-const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
+    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
 
-    // Add the translated text and ready message
     const isSingleDocument = selectedLanguages.length === 1;
     const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
     const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
@@ -390,51 +417,99 @@ const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); //
     translatedDocuments.appendChild(readyMessage);
 
     for (const language of selectedLanguages) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("language", language);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("language", language);
+    formData.append("output_format", documentFormat); // Correct key for output format
 
-        try {
-            const response = await fetch('http://127.0.0.1:8001/upload-summarize-translate/', {
-                method: 'POST',
-                body: formData,
-            });
+    try {
+        const startTime = performance.now(); // Start timer
 
-            if (response.ok) {
-                const data = await response.json();
-                const blob = new Blob([data.summary], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
+        const response = await fetch('http://127.0.0.1:8004/upload-summarize-translate/', {
+            method: 'POST',
+            body: formData,
+        });
 
-                // Create a download link with the document name and language
-                const downloadLink = document.createElement('a');
-                downloadLink.href = url;
-                downloadLink.download = `${fileNameWithoutExtension}_${language}.txt`;
-                downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.txt`;
-                translatedDocuments.appendChild(downloadLink);
+        const endTime = performance.now(); // End timer
+        const timeTaken = ((endTime - startTime) / 1000).toFixed(2); // Time taken in seconds
 
-                // Add a line break after each download link
-                translatedDocuments.appendChild(document.createElement('br'));
-            } else {
-                alert(`Failed to process the file for language: ${language}. Please try again.`);
-            }
-        } catch (error) {
-            console.error(`Error processing language ${language}:`, error);
-            alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
-        }
+     // Assuming this code is inside the loop that handles the response from the server
+if (response.ok) {
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    
+    // Create the download link for the translated document
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = `${fileNameWithoutExtension}_${language}.${documentFormat}`;
+    downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.${documentFormat}`;
+    downloadLink.style.display = 'block'; // Ensure the link is visible
+
+    // Append the link to the translatedDocuments container
+    const container = document.getElementById('translatedDocuments');
+    container.appendChild(downloadLink);
+    container.appendChild(document.createElement('br'));
+
+    // Make the translatedDocuments container visible
+    container.style.display = 'block';
+
+    console.log('Translated document appended:', downloadLink.href);
+} else {
+    console.error(`Failed to process the file for language: ${language}`);
+}
+    } catch (error) {
+        console.error(`Error processing language ${language}:`, error);
+        alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
     }
-    translatedDocuments.style.display = 'block';
-  translatedDocuments.style.padding = '40px';
-  translatedDocuments.style.borderRadius = '8px';
-  translatedDocuments.style.backgroundColor = '#fff';
-  translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
-  translatedDocuments.style.marginLeft = '20rem';
-  translatedDocuments.style.marginTop = '5rem'; 
-    translatedDocuments.style.display = 'block';
-    clearInterval(window.progress); // Stop the progress bar
-    document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
-    document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
+    }
 }
 
+
+// Helper function to get selected languages
+function getSelectedLanguages() {
+    const checkboxes = document.querySelectorAll('input[name="languages"]:checked');
+    const selectedLanguages = Array.from(checkboxes).map(checkbox => checkbox.value);
+    return selectedLanguages;
+}
+
+// Helper function to get the selected document format
+function getSelectedDocumentFormat() {
+    const selectedFormat = document.querySelector('input[name="format-group"]:checked');
+    return selectedFormat ? selectedFormat.value : null;
+}
+
+// Helper function to get document icon based on format
+const icons = {
+    'pdf': 'https://cdn-icons-png.flaticon.com/128/337/337946.png',
+    'docx': 'https://cdn-icons-png.flaticon.com/128/716/716935.png',
+    'txt': 'https://cdn-icons-png.flaticon.com/128/337/337956.png',
+    'default': 'https://cdn-icons-png.flaticon.com/128/default-icon.png' // Replace with actual default icon URL
+};
+
+function getDocumentIcon(format) {
+    return icons[format] || icons['default'];
+
+translatedDocuments.style.display = 'block';
+translatedDocuments.style.padding = '40px';
+translatedDocuments.style.borderRadius = '8px';
+translatedDocuments.style.backgroundColor = '#fff';
+translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
+translatedDocuments.style.marginLeft = '20rem';
+translatedDocuments.style.marginTop = '5rem';
+clearInterval(window.progress); // Stop the progress bar
+document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
+document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
+
+// Function to get the document icon based on file format
+function getDocumentIcon(format) {
+    const icons = {
+        'pdf': 'https://cdn-icons-png.flaticon.com/128/337/337946.png',
+        'docx': 'https://cdn-icons-png.flaticon.com/128/716/716935.png',
+        'txt': 'https://cdn-icons-png.flaticon.com/128/337/337956.png'
+    };
+    return icons[format] || 'path/to/default-icon.png';
+}
+}
 
 
 
