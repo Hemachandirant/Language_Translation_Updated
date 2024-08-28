@@ -434,7 +434,7 @@ async function startTranslation() {
         const timeTaken = ((endTime - startTime) / 1000).toFixed(2); // Time taken in seconds
 
      // Assuming this code is inside the loop that handles the response from the server
-if (response.ok) {
+     if (response.ok) {
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     
@@ -444,6 +444,16 @@ if (response.ok) {
     downloadLink.download = `${fileNameWithoutExtension}_${language}.${documentFormat}`;
     downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.${documentFormat}`;
     downloadLink.style.display = 'block'; // Ensure the link is visible
+
+    // Create an image element for the icon
+    const icon = document.createElement('img');
+    icon.src = getDocumentIcon(documentFormat);
+    icon.alt = `${documentFormat} icon`;
+    icon.style.width = '24px'; // Adjust size as needed
+    icon.style.marginRight = '8px'; // Space between icon and text
+
+    // Prepend the icon to the download link
+    downloadLink.prepend(icon);
 
     // Append the link to the translatedDocuments container
     const container = document.getElementById('translatedDocuments');
