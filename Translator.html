@@ -344,39 +344,65 @@ async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
     const selectedLanguages = getSelectedLanguages();
-
+    const selectedLanguage = "French";
+    const userId = 1; // Assuming you have an input field for the user ID
+ 
+ 
+    const formDataFordocument = new FormData();
+    formDataFordocument.append("file", file);
+    formDataFordocument.append("language", selectedLanguage);
+    formDataFordocument.append("user_id", userId);
+ 
+    try {
+        const response = await fetch('https://immune-grouper-marginally.ngrok-free.app/upload-original-document/', {
+            method: 'POST',
+            body: formDataFordocument,
+        });
+        console.log(response);
+ 
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+ 
+       
+ 
+    } catch (error) {
+        console.error('Error during the storing process:', error);
+        alert('There was an error during the original document DB storing process. Please try again.');
+    }
+ 
     if (!file) {
         alert("Please upload a file before starting the translation.");
         return;
     }
-
+ 
     if (selectedLanguages.length === 0) {
         alert("Please select at least one target language.");
         return;
     }
-
+ 
     startProgress();
-
+ 
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
-
+ 
     const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
-
+ 
     const isSingleDocument = selectedLanguages.length === 1;
     const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
     const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
-
+ 
     const title = document.createElement('h3');
     title.className = 'translated-title';
     title.textContent = translatedText;
-
+ 
     const readyMessage = document.createElement('div');
     readyMessage.className = 'ready-msg';
     readyMessage.textContent = readyMessageText;
-
+ 
     translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
     translatedDocuments.appendChild(readyMessage);
-
+ 
     const language_code_mapping = {
     "German": "deu_Latn",
     "French": "fra_Latn",
@@ -384,36 +410,60 @@ async function startTranslation() {
     "Mandarin": "zho_Hans",
     "Spanish": "spa_Latn"
 };
-
+ 
 for (const language of selectedLanguages) {
     const formData = new FormData();
     formData.append("file", file);
-    
+   
     // Map the language to its corresponding code
     const targetLangCode = language_code_mapping[language];
-    
+   
     if (targetLangCode) {
         formData.append("target_lang", targetLangCode);
     } else {
         console.error(`Language not found in mapping: ${language}`);
-    }   
-
+    }  
+ 
         try {
             const response = await fetch('http://127.0.0.1:8002/translate-document/', {
                 method: 'POST',
                 body: formData,
             });
-
+ 
             if (response.ok) {
                 const blob = await response.blob();
-                const downloadUrl = window.URL.createObjectURL(blob);
-
-                const downloadLink = document.createElement('a');
-                downloadLink.href = downloadUrl;
-                downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
-                downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
-                translatedDocuments.appendChild(downloadLink);
-                translatedDocuments.appendChild(document.createElement('br'));
+               
+                    console.log("uploded translated")
+ 
+                const formDataForTranslatedDocument = new FormData();
+                formDataForTranslatedDocument.append("file", blob, `${fileNameWithoutExtension}_${language}.docx`);
+                formDataForTranslatedDocument.append("language", language);
+                formDataForTranslatedDocument.append("user_id", userId);
+ 
+                try {
+                    const storeResponse = await fetch('https://immune-grouper-marginally.ngrok-free.app/upload-translated-document/', {
+                        method: 'POST',
+                        body: formDataForTranslatedDocument,
+                    });
+ 
+                    if (!storeResponse.ok) {
+                        throw new Error(`HTTP error! Status: ${storeResponse.status}`);
+                    }
+ 
+                    console.log("Uploaded translated document to the database.");
+ 
+                    const downloadUrl = window.URL.createObjectURL(blob);
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = downloadUrl;
+                    downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
+                    downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
+                    translatedDocuments.appendChild(downloadLink);
+                    translatedDocuments.appendChild(document.createElement('br'));
+ 
+                } catch (error) {
+                    console.error('Error during the storing process:', error);
+                    alert('There was an error during the DB storing process. Please try again.');
+                }
             } else {
                 alert(`Failed to process the file for language: ${language}. Please try again.`);
             }
@@ -421,21 +471,22 @@ for (const language of selectedLanguages) {
             console.error(`Error processing language ${language}:`, error);
             alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
         }
-    }
-
-    translatedDocuments.style.display = 'block';
+        }
+   
+ 
+  translatedDocuments.style.display = 'block';
   translatedDocuments.style.padding = '40px';
   translatedDocuments.style.borderRadius = '8px';
   translatedDocuments.style.backgroundColor = '#fff';
   translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
   translatedDocuments.style.marginLeft = '20rem';
-  translatedDocuments.style.marginTop = '5rem'; 
+  translatedDocuments.style.marginTop = '5rem';
     translatedDocuments.style.display = 'block';
     clearInterval(window.progress); // Stop the progress bar
     document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
     document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
 }
-
+ 
 
 
 
