@@ -332,14 +332,13 @@ function startSummarization() {
     }, intervalTime);
 }
     
-function startProgress() {
+function startProgress(duration) {
     let progressBar = document.querySelector(".circular-progress");
     let valueContainer = document.querySelector(".value-container");
     let tickImg = document.querySelector(".tick-img");
 
     let progressValue = 0;
     let progressEndValue = 100;
-    let duration = 120000; // 2 minutes in milliseconds
     let intervalTime = 100; // Update every 100 milliseconds
 
     let totalUpdates = duration / intervalTime;
@@ -363,39 +362,45 @@ function startProgress() {
     }, intervalTime);
 }
 
+function completeProgress() {
+    clearInterval(window.progress);
+    let progressBar = document.querySelector(".circular-progress");
+    let valueContainer = document.querySelector(".value-container");
+    let tickImg = document.querySelector(".tick-img");
+
+    progressBar.style.background = `conic-gradient(
+        #000D1D 360deg,
+        #f7f7f7 360deg
+    )`;
+    valueContainer.textContent = `100%`;
+    progressBar.style.display = 'none';
+    tickImg.style.display = 'block';
+}
+
+
 async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
     const selectedLanguages = getSelectedLanguages(); // This holds the selected languages
     const documentFormat = getSelectedDocumentFormat(); // This will get the selected document format
-    const summarizeLabel = document.getElementById('summarizeLabel'); // Assuming you have this label
 
-    // Check if the file is uploaded
     if (!file) {
         alert("Please upload a file before starting the translation.");
         return;
     }
 
-    // Check if at least one language is selected
     if (selectedLanguages.length === 0) {
         alert("Please select at least one target language.");
         return;
     }
 
-    // Check if document format is selected
     if (!documentFormat) {
         alert("Please select a document format.");
         return;
     }
 
-    // Check if summarization is complete
-    // if (summarizeLabel.textContent !== 'Summarized!') {
-    //     alert('Please wait for the summary process to complete before starting the translation.');
-    //     return;
-    // }
-
-    // Now, all conditions are met, start the progress bar
-    startProgress(); 
+    // Start the progress bar with an estimated duration (e.g., 2 minutes)
+    startProgress(120000);
 
     const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
     const translatedDocuments = document.getElementById('translatedDocuments');
@@ -417,63 +422,54 @@ async function startTranslation() {
     translatedDocuments.appendChild(readyMessage);
 
     for (const language of selectedLanguages) {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("language", language);
-    formData.append("output_format", documentFormat); // Correct key for output format
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("language", language);
+        formData.append("output_format", documentFormat); // Correct key for output format
 
-    try {
-        const startTime = performance.now(); // Start timer
+        try {
+            const response = await fetch('http://127.0.0.1:8004/upload-summarize-translate/', {
+                method: 'POST',
+                body: formData,
+            });
 
-        const response = await fetch('http://127.0.0.1:8004/upload-summarize-translate/', {
-            method: 'POST',
-            body: formData,
-        });
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
 
-        const endTime = performance.now(); // End timer
-        const timeTaken = ((endTime - startTime) / 1000).toFixed(2); // Time taken in seconds
+                const downloadLink = document.createElement('a');
+                downloadLink.href = url;
+                downloadLink.download = `${fileNameWithoutExtension}_${language}.${documentFormat}`;
+                downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.${documentFormat}`;
+                downloadLink.style.display = 'block';
 
-     // Assuming this code is inside the loop that handles the response from the server
-     if (response.ok) {
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    
-    // Create the download link for the translated document
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = `${fileNameWithoutExtension}_${language}.${documentFormat}`;
-    downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.${documentFormat}`;
-    downloadLink.style.display = 'block'; // Ensure the link is visible
+                const icon = document.createElement('img');
+                icon.src = getDocumentIcon(documentFormat);
+                icon.alt = `${documentFormat} icon`;
+                icon.style.width = '24px';
+                icon.style.marginRight = '8px';
 
-    // Create an image element for the icon
-    const icon = document.createElement('img');
-    icon.src = getDocumentIcon(documentFormat);
-    icon.alt = `${documentFormat} icon`;
-    icon.style.width = '24px'; // Adjust size as needed
-    icon.style.marginRight = '8px'; // Space between icon and text
+                downloadLink.prepend(icon);
 
-    // Prepend the icon to the download link
-    downloadLink.prepend(icon);
+                const container = document.getElementById('translatedDocuments');
+                container.appendChild(downloadLink);
+                container.appendChild(document.createElement('br'));
 
-    // Append the link to the translatedDocuments container
-    const container = document.getElementById('translatedDocuments');
-    container.appendChild(downloadLink);
-    container.appendChild(document.createElement('br'));
+                container.style.display = 'block';
 
-    // Make the translatedDocuments container visible
-    container.style.display = 'block';
-
-    console.log('Translated document appended:', downloadLink.href);
-} else {
-    console.error(`Failed to process the file for language: ${language}`);
-}
-    } catch (error) {
-        console.error(`Error processing language ${language}:`, error);
-        alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
+                console.log('Translated document appended:', downloadLink.href);
+            } else {
+                console.error(`Failed to process the file for language: ${language}`);
+            }
+        } catch (error) {
+            console.error(`Error processing language ${language}:`, error);
+            alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
+        }
     }
-    }
-}
 
+    // Complete the progress bar when all translations are done
+    completeProgress();
+}
 
 // Helper function to get selected languages
 function getSelectedLanguages() {
