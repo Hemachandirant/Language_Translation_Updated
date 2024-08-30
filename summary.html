@@ -148,7 +148,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 <button type="button" id="startTranslateBtn" class="submitbutton" onclick="startTranslation()">Start Translating</button>
                                 <div class="tick-mark"></div>
                         </div>
@@ -159,6 +159,10 @@
                                     <div class="value-container">0%</div>
                                 </div>
                                 <img src="check.png" alt="Completed" class="tick-img" style="display: none;">
+                                <!-- Estimated time will be shown here -->
+                                <div class="estimated-time" style="display: none; margin-top: 10px; font-size: 14px; color: #666;">
+                                    Estimated time remaining: <span id="estimatedTime"></span>
+                                </div>
                             </div>
                         </div>
                         
@@ -381,10 +385,31 @@ async function startTranslation() {
         alert("Please select a document format.");
         return;
     }
+    
 
-    // Start the progress bar
-    startProgress(120000); // For example, set the estimated time to 2 minutes
+    // Start the progress bar with an estimated duration of 2 minutes (120 seconds)
+    const estimatedTimeMs = 17000; // 2 minutes in milliseconds
+    startProgress(estimatedTimeMs);
 
+    // Show the estimated time container
+    const estimatedTimeContainer = document.querySelector('.estimated-time');
+    estimatedTimeContainer.style.display = 'block';
+
+    // Set and show the initial estimated time
+    const estimatedTimeSpan = document.getElementById('estimatedTime');
+    estimatedTimeSpan.textContent = formatTime(estimatedTimeMs);
+
+    // Update the estimated time countdown every second
+    const intervalId = setInterval(() => {
+        const currentTime = estimatedTimeSpan.textContent.split(":");
+        const remainingTimeMs = (parseInt(currentTime[0]) * 60000) + (parseInt(currentTime[1]) * 1000) - 1000;
+        
+        if (remainingTimeMs >= 0) {
+            estimatedTimeSpan.textContent = formatTime(remainingTimeMs);
+        } else {
+            clearInterval(intervalId);
+        }
+    }, 1000);
     const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
@@ -437,7 +462,7 @@ async function startTranslation() {
 
                 downloadLink.prepend(icon);
                 translatedDocuments.appendChild(downloadLink);
-                translatedDocuments.appendChild(document.createElement('br'));
+                // translatedDocuments.appendChild(document.createElement('br'));
 
                 console.log('Translated document appended:', downloadLink.href);
             } else {
@@ -463,6 +488,9 @@ async function startTranslation() {
 
     // Complete the progress bar
     completeProgress();
+    clearInterval(intervalId);
+    // Hide the estimated time container once the files are ready
+    estimatedTimeContainer.style.display = 'none';
     document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
     document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
 
