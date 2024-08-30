@@ -135,10 +135,6 @@
                                     <div class="value-container">0%</div>
                                 </div>
                                 <img src="check.png" alt="Completed" class="tick-img" style="display: none;">
-                                <!-- Estimated time will be shown here -->
-                                <div class="estimated-time" style="display: none; margin-top: 10px; font-size: 14px; color: #666;">
-                                    Estimated time remaining: 3 min/page <span id="estimatedTime"></span>
-                                </div>
                             </div>
                         </div>
                         
@@ -298,29 +294,6 @@ async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
     const selectedLanguages = getSelectedLanguages();
-    const selectedLanguage = "French";
-    const userId = 1; // Assuming you have an input field for the user ID
-
-    const formDataFordocument = new FormData();
-    formDataFordocument.append("file", file);
-    formDataFordocument.append("language", selectedLanguage);
-    formDataFordocument.append("user_id", userId);
-
-    // POST original document
-    try {
-        const response = await fetch('https://immune-grouper-marginally.ngrok-free.app/upload-original-document/', {
-            method: 'POST',
-            body: formDataFordocument,
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-    } catch (error) {
-        console.error('Error during the storing process:', error);
-        alert('There was an error during the original document DB storing process. Please try again.');
-    }
 
     if (!file) {
         alert("Please upload a file before starting the translation.");
@@ -336,30 +309,6 @@ async function startTranslation() {
 
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
-
-    // Start the progress bar with an estimated duration (adjust the time as needed)
-    const estimatedTimeMs = 17000; // Example: 17 seconds in milliseconds
-    startProgress(estimatedTimeMs);
-
-    // Show the estimated time container
-    const estimatedTimeContainer = document.querySelector('.estimated-time');
-    estimatedTimeContainer.style.display = 'block';
-
-    // Set and show the initial estimated time
-    const estimatedTimeSpan = document.getElementById('estimatedTime');
-    estimatedTimeSpan.textContent = formatTime(estimatedTimeMs);
-
-    // Update the estimated time countdown every second
-    const intervalId = setInterval(() => {
-        const currentTime = estimatedTimeSpan.textContent.split(":");
-        const remainingTimeMs = (parseInt(currentTime[0]) * 60000) + (parseInt(currentTime[1]) * 1000) - 1000;
-
-        if (remainingTimeMs >= 0) {
-            estimatedTimeSpan.textContent = formatTime(remainingTimeMs);
-        } else {
-            clearInterval(intervalId);
-        }
-    }, 1000);
 
     const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
 
@@ -379,24 +328,25 @@ async function startTranslation() {
     translatedDocuments.appendChild(readyMessage);
 
     const language_code_mapping = {
-        "German": "deu_Latn",
-        "French": "fra_Latn",
-        "Dutch": "nld_Latn",
-        "Mandarin": "zho_Hans",
-        "Spanish": "spa_Latn"
-    };
+    "German": "deu_Latn",
+    "French": "fra_Latn",
+    "Dutch": "nld_Latn",
+    "Mandarin": "zho_Hans",
+    "Spanish": "spa_Latn"
+};
 
-    for (const language of selectedLanguages) {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const targetLangCode = language_code_mapping[language];
-
-        if (targetLangCode) {
-            formData.append("target_lang", targetLangCode);
-        } else {
-            console.error(`Language not found in mapping: ${language}`);
-        }
+for (const language of selectedLanguages) {
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    // Map the language to its corresponding code
+    const targetLangCode = language_code_mapping[language];
+    
+    if (targetLangCode) {
+        formData.append("target_lang", targetLangCode);
+    } else {
+        console.error(`Language not found in mapping: ${language}`);
+    }   
 
         try {
             const response = await fetch('http://127.0.0.1:8002/translate-document/', {
@@ -406,38 +356,14 @@ async function startTranslation() {
 
             if (response.ok) {
                 const blob = await response.blob();
-                console.log("Translated document uploaded");
+                const downloadUrl = window.URL.createObjectURL(blob);
 
-                // Upload the translated document to the database
-                const formDataForTranslatedDocument = new FormData();
-                formDataForTranslatedDocument.append("file", blob, `${fileNameWithoutExtension}_${language}.docx`);
-                formDataForTranslatedDocument.append("language", language);
-                formDataForTranslatedDocument.append("user_id", userId);
-
-                try {
-                    const storeResponse = await fetch('https://immune-grouper-marginally.ngrok-free.app/upload-translated-document/', {
-                        method: 'POST',
-                        body: formDataForTranslatedDocument,
-                    });
-
-                    if (!storeResponse.ok) {
-                        throw new Error(`HTTP error! Status: ${storeResponse.status}`);
-                    }
-
-                    console.log("Uploaded translated document to the database.");
-
-                    const downloadUrl = window.URL.createObjectURL(blob);
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = downloadUrl;
-                    downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
-                    downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
-                    translatedDocuments.appendChild(downloadLink);
-                    translatedDocuments.appendChild(document.createElement('br'));
-
-                } catch (error) {
-                    console.error('Error during the storing process:', error);
-                    alert('There was an error during the DB storing process. Please try again.');
-                }
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
+                downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
+                translatedDocuments.appendChild(downloadLink);
+                translatedDocuments.appendChild(document.createElement('br'));
             } else {
                 alert(`Failed to process the file for language: ${language}. Please try again.`);
             }
@@ -447,21 +373,13 @@ async function startTranslation() {
         }
     }
 
-    // Complete the progress bar and clear the interval once translations are done
-    completeProgress();
-    clearInterval(intervalId);
-
-    // Hide the estimated time container once the files are ready
-    estimatedTimeContainer.style.display = 'none';
-
- 
-  translatedDocuments.style.display = 'block';
+    translatedDocuments.style.display = 'block';
   translatedDocuments.style.padding = '40px';
   translatedDocuments.style.borderRadius = '8px';
   translatedDocuments.style.backgroundColor = '#fff';
   translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
   translatedDocuments.style.marginLeft = '20rem';
-  translatedDocuments.style.marginTop = '5rem';
+  translatedDocuments.style.marginTop = '5rem'; 
     translatedDocuments.style.display = 'block';
     clearInterval(window.progress); // Stop the progress bar
     document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar

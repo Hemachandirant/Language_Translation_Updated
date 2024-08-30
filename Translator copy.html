@@ -205,80 +205,28 @@ document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(fu
     });
 });
 
-// Event listener for file upload
 document.getElementById('documentUpload').addEventListener('change', async function () {
     const file = this.files[0];
     if (file) {
-        const fileType = file.type;
-        const reader = new FileReader();
-
-        if (fileType === 'application/pdf') {
-            reader.onload = async function () {
-                const typedarray = new Uint8Array(this.result);
-                try {
-                    const text = await extractTextFromPDF(typedarray);
-                    processFile(text, file.name);
-                } catch (error) {
-                    console.error('Error loading PDF:', error);
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-            fileType === 'application/msword' || fileType === 'text/plain') {
-            reader.onload = function () {
-                const text = reader.result;
-                processFile(text, file.name);
-            };
-            reader.readAsText(file);
-        } else if (fileType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
-            fileType === 'application/vnd.ms-powerpoint') {
-            // Handle PPT/PPTX file processing
-            reader.onload = function () {
-                const text = extractTextFromPPT(file);  // You will need to implement this
-                processFile(text, file.name);
-            };
-            reader.readAsArrayBuffer(file);
-        } else {
-            console.error('Unsupported file type:', fileType);
+        try {
+            await detectLanguage(file);
+            document.getElementById('file-name').textContent = file.name;
+            document.getElementById('file-info-wrapper').style.display = 'block';
+        } catch (error) {
+            console.error('Error detecting language:', error);
         }
     }
 });
 
-// Process the uploaded file, display the file name, and detect language
-async function processFile(text, fileName) {
-    document.getElementById('file-name').textContent = fileName;
-    document.getElementById('file-info-wrapper').style.display = 'block';
-    try {
-        await detectLanguage(text);
-    } catch (error) {
-        console.error('Error detecting language:', error);
-    }
-}
+// Upload the file and detect the language using the FastAPI endpoint
+async function detectLanguage(file) {
+    const formData = new FormData();
+    formData.append('file', file);
 
-// Extract text from a PDF file
-async function extractTextFromPDF(typedarray) {
-    const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
-    let text = '';
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map(item => item.str).join(' ');
-        text += pageText + ' ';
-    }
-
-    return text.trim();
-}
-
-// Detect the language of the text using the FastAPI endpoint
-async function detectLanguage(text) {
     try {
         const response = await fetch('http://127.0.0.1:8000/detect-language/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: text }),
+            body: formData,
         });
 
         if (response.ok) {
@@ -286,12 +234,14 @@ async function detectLanguage(text) {
             const detectedLanguage = data.language;
             document.querySelector('.Source_language').value = detectedLanguage;
         } else {
-            console.error('Failed to detect language');
+            const errorData = await response.json();
+            console.error('Failed to detect language:', errorData.detail);
         }
     } catch (error) {
         console.error('Error detecting language:', error);
     }
 }
+
 function startSummarization() {
     let progressValue = 0;
     let progressEndValue = 100;
@@ -486,7 +436,7 @@ for (const language of selectedLanguages) {
     document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
     document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
 }
- 
+
 
 
 
