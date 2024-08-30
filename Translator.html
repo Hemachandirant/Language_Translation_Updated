@@ -135,8 +135,13 @@
                                     <div class="value-container">0%</div>
                                 </div>
                                 <img src="check.png" alt="Completed" class="tick-img" style="display: none;">
+                                <!-- Estimated time will be shown here -->
+                                <div class="estimated-time" style="display: none; margin-top: 10px; font-size: 14px; color: #666;">
+                                    Estimated time remaining: <span id="estimatedTime"></span>
+                                </div>
                             </div>
                         </div>
+                        
                         
                     </form>
                 </div>
@@ -307,6 +312,29 @@ async function startTranslation() {
 
     startProgress();
 
+    // Start the progress bar with an estimated duration of 2 minutes (120 seconds)
+    const estimatedTimeMs = '500000'; // 2 minutes in milliseconds
+    startProgress(estimatedTimeMs);
+
+    // Show the estimated time container
+    const estimatedTimeContainer = document.querySelector('.estimated-time');
+    estimatedTimeContainer.style.display = 'block';
+
+    // Set and show the initial estimated time
+    const estimatedTimeSpan = document.getElementById('estimatedTime');
+    estimatedTimeSpan.textContent = formatTime(estimatedTimeMs);
+
+    // Update the estimated time countdown every second
+    const intervalId = setInterval(() => {
+        const currentTime = estimatedTimeSpan.textContent.split(":");
+        const remainingTimeMs = (parseInt(currentTime[0]) * 60000) + (parseInt(currentTime[1]) * 1000) - 1000;
+        
+        if (remainingTimeMs >= 0) {
+            estimatedTimeSpan.textContent = formatTime(remainingTimeMs);
+        } else {
+            clearInterval(intervalId);
+        }
+    }, 1000);
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
 
@@ -334,7 +362,21 @@ async function startTranslation() {
     "Mandarin": "zho_Hans",
     "Spanish": "spa_Latn"
 };
+function completeProgress() {
+    clearInterval(window.progress);
+    let progressBar = document.querySelector(".circular-progress");
+    let valueContainer = document.querySelector(".value-container");
+    let tickImg = document.querySelector(".tick-img");
 
+    progressBar.style.background = `conic-gradient(
+        #000D1D 360deg,
+        #f7f7f7 360deg
+    )`;
+    valueContainer.textContent = `100%`;
+    progressBar.style.display = 'none';
+    tickImg.style.display = 'block';
+}
+const startTime = Date.now();
 for (const language of selectedLanguages) {
     const formData = new FormData();
     formData.append("file", file);
@@ -362,6 +404,18 @@ for (const language of selectedLanguages) {
                 downloadLink.href = downloadUrl;
                 downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
                 downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
+
+                // Create an image element for the icon
+                const icon = document.createElement('img');
+                icon.src = 'https://cdn-icons-png.flaticon.com/128/716/716935.png';
+                icon.alt = 'Word Icon';
+                icon.style.width = '16px'; // Adjust size as needed
+                icon.style.height = '16px'; // Adjust size as needed
+                icon.style.marginRight = '5px'; // Space between icon and text
+
+                // Prepend the icon to the download link
+                downloadLink.prepend(icon);
+
                 translatedDocuments.appendChild(downloadLink);
                 translatedDocuments.appendChild(document.createElement('br'));
             } else {
@@ -372,6 +426,27 @@ for (const language of selectedLanguages) {
             alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
         }
     }
+    
+    const endTime = Date.now();
+    const translationTimeMs = endTime - startTime;
+    const formattedTranslationTime = formatTime(translationTimeMs);
+
+    // Create a div to show the word count and time taken
+    const translationDetails = document.createElement('div');
+    translationDetails.className = 'translation-details';
+    translationDetails.innerHTML = `
+        <p>Time taken: ${formattedTranslationTime}</p>
+    `;
+    translatedDocuments.appendChild(translationDetails);
+
+    // Complete the progress bar
+    completeProgress();
+    clearInterval(intervalId);
+
+    // Hide the estimated time container once the files are ready
+    estimatedTimeContainer.style.display = 'none';
+    document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
+    document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
 
     translatedDocuments.style.display = 'block';
   translatedDocuments.style.padding = '40px';
@@ -387,7 +462,12 @@ for (const language of selectedLanguages) {
 }
 
 
-
+// Helper function to format milliseconds into a readable time (minutes and seconds)
+function formatTime(ms) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return `${minutes} mins ${seconds < 10 ? '0' : ''}${seconds} secs`;
+}
 
 
 </script>
