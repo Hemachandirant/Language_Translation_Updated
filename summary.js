@@ -314,64 +314,64 @@ document.addEventListener('DOMContentLoaded', function () {
 //   }, intervalTime);
 // }
 
-function displayTranslatedDocuments() {
-  const targetLanguages = document.querySelectorAll('input[name="dropdown-group"]:checked');
-  const fileInput = document.getElementById('documentUpload');
-  const translatedDocuments = document.getElementById('translatedDocuments');
+// function displayTranslatedDocuments() {
+//   const targetLanguages = document.querySelectorAll('input[name="dropdown-group"]:checked');
+//   const fileInput = document.getElementById('documentUpload');
+//   const translatedDocuments = document.getElementById('translatedDocuments');
 
-  translatedDocuments.innerHTML = ''; // Clear previous content
+//   translatedDocuments.innerHTML = ''; // Clear previous content
 
-  const uploadedFileName = fileInput.files[0].name;
-  const fileExtension = uploadedFileName.split('.').pop();
-  const fileNameWithoutExtension = uploadedFileName.replace(`.${fileExtension}`, '');
+//   const uploadedFileName = fileInput.files[0].name;
+//   const fileExtension = uploadedFileName.split('.').pop();
+//   const fileNameWithoutExtension = uploadedFileName.replace(`.${fileExtension}`, '');
 
-  targetLanguages.forEach(language => {
-      const languageCode = getLanguageCode(language.value);
-      const translatedFileName = `${fileNameWithoutExtension}_${languageCode}.${fileExtension}`;
+//   targetLanguages.forEach(language => {
+//       const languageCode = getLanguageCode(language.value);
+//       const translatedFileName = `${fileNameWithoutExtension}_${languageCode}.${fileExtension}`;
       
-      const fileLink = document.createElement('a');
-      fileLink.href = `path/to/translated/files/${translatedFileName}`;
-      fileLink.textContent = translatedFileName;
-      fileLink.target = '_blank';
-      fileLink.classList.add('d-block', 'mb-2', 'translated-file-link'); // Styling
+//       const fileLink = document.createElement('a');
+//       fileLink.href = `path/to/translated/files/${translatedFileName}`;
+//       fileLink.textContent = translatedFileName;
+//       fileLink.target = '_blank';
+//       fileLink.classList.add('d-block', 'mb-2', 'translated-file-link'); // Styling
 
-      translatedDocuments.appendChild(fileLink);
-  });
+//       translatedDocuments.appendChild(fileLink);
+//   });
   
-  // Determine singular or plural text based on the number of documents
-  const isSingleDocument = targetLanguages.length === 1;
-  const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
-  const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
+//   // Determine singular or plural text based on the number of documents
+//   const isSingleDocument = targetLanguages.length === 1;
+//   const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
+//   const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
 
-  // Add the translated text and ready message
-  const title = document.createElement('h3');
-  title.className = 'translated-title';
-  title.textContent = translatedText;
+//   // Add the translated text and ready message
+//   const title = document.createElement('h3');
+//   title.className = 'translated-title';
+//   title.textContent = translatedText;
 
-  const readyMessage = document.createElement('div');
-  readyMessage.className = 'ready-msg';
-  readyMessage.textContent = readyMessageText;
+//   const readyMessage = document.createElement('div');
+//   readyMessage.className = 'ready-msg';
+//   readyMessage.textContent = readyMessageText;
 
-  translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
-  translatedDocuments.appendChild(readyMessage);
+//   translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
+//   translatedDocuments.appendChild(readyMessage);
 
-  // Show the translated documents section with padding
-  translatedDocuments.style.display = 'block';
-  translatedDocuments.style.padding = '40px';
-  translatedDocuments.style.borderRadius = '8px';
-  translatedDocuments.style.backgroundColor = '#fff';
-  translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
-  translatedDocuments.style.marginLeft = '20rem';
-  translatedDocuments.style.marginTop = '5rem';
+//   // Show the translated documents section with padding
+//   translatedDocuments.style.display = 'block';
+//   translatedDocuments.style.padding = '40px';
+//   translatedDocuments.style.borderRadius = '8px';
+//   translatedDocuments.style.backgroundColor = '#fff';
+//   translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
+//   translatedDocuments.style.marginLeft = '20rem';
+//   translatedDocuments.style.marginTop = '5rem';
 
-  translatedDocuments.addEventListener('mouseover', function() {
-    translatedDocuments.style.backgroundColor = '#f7f7f7'; // Change to your desired hover background color
-});
+//   translatedDocuments.addEventListener('mouseover', function() {
+//     translatedDocuments.style.backgroundColor = '#f7f7f7'; // Change to your desired hover background color
+// });
 
-translatedDocuments.addEventListener('mouseout', function() {
-    translatedDocuments.style.backgroundColor = '#fff'; // Reset the background color when not hovered
-});
-}
+// translatedDocuments.addEventListener('mouseout', function() {
+//     translatedDocuments.style.backgroundColor = '#fff'; // Reset the background color when not hovered
+// });
+// }
 
 function getLanguageCode(language) {
   const languageCodes = {
@@ -405,11 +405,11 @@ window.onclick = function(event) {
 
 
 
-// function logout() {
-//   // Your logout logic here
-//   // alert("Logging out...");
-//   window.location.href = "login.html"; // Replace with your actual logout URL
-// }
+function logout() {
+  // Your logout logic here
+  // alert("Logging out...");
+  window.location.href = "login.html"; // Replace with your actual logout URL
+}
 
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -248,7 +248,7 @@ async function detectLanguage(file) {
     formData.append('file', file);
 
     try {
-        const response = await fetch('http://127.0.0.1:8004/detect-language/', {
+        const response = await fetch('http://127.0.0.1:8000/detect-language/', {
             method: 'POST',
             body: formData,
         });
@@ -328,12 +328,44 @@ function completeProgress() {
     tickImg.style.display = 'block';
 }
 
+function getWordCount(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const content = event.target.result;
+
+            // Simple word count logic: splitting the text by spaces or newlines
+            const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
+            resolve(wordCount);
+        };
+
+        reader.onerror = function(event) {
+            reject("Error reading file");
+        };
+
+        // Read file content as text (handles .txt and similar formats)
+        if (file.type === "text/plain") {
+            reader.readAsText(file);
+        } else {
+            // Handle other file formats like .docx, .pdf, etc., using a library
+            reject("Unsupported file format for word count");
+        }
+    });
+}
+
+// Helper function to format milliseconds into a readable time (minutes and seconds)
+function formatTime(ms) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return `${minutes} mins ${seconds < 10 ? '0' : ''}${seconds} secs`;
+}
 
 async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
-    const selectedLanguages = getSelectedLanguages(); // This holds the selected languages
-    const documentFormat = getSelectedDocumentFormat(); // This will get the selected document format
+    const selectedLanguages = getSelectedLanguages();
+    const documentFormat = getSelectedDocumentFormat();
 
     if (!file) {
         alert("Please upload a file before starting the translation.");
@@ -350,33 +382,23 @@ async function startTranslation() {
         return;
     }
 
-    // Start the progress bar with an estimated duration (e.g., 2 minutes)
-    startProgress(120000);
+    // Start the progress bar
+    startProgress(120000); // For example, set the estimated time to 2 minutes
 
-    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
+    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
 
     const isSingleDocument = selectedLanguages.length === 1;
-    const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
     const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
 
-    const title = document.createElement('h3');
-    title.className = 'translated-title';
-    title.textContent = translatedText;
-
-    const readyMessage = document.createElement('div');
-    readyMessage.className = 'ready-msg';
-    readyMessage.textContent = readyMessageText;
-
-    translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
-    translatedDocuments.appendChild(readyMessage);
+    const startTime = Date.now();
 
     for (const language of selectedLanguages) {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("language", language);
-        formData.append("output_format", documentFormat); // Correct key for output format
+        formData.append("output_format", documentFormat);
 
         try {
             const response = await fetch('http://127.0.0.1:8001/upload-summarize-translate/', {
@@ -387,6 +409,19 @@ async function startTranslation() {
             if (response.ok) {
                 const blob = await response.blob();
                 const url = URL.createObjectURL(blob);
+
+                // Show the title and ready message after the first successful translation
+                if (!translatedDocuments.querySelector('.translated-title')) {
+                    const title = document.createElement('h3');
+                    title.className = 'translated-title';
+                    title.textContent = isSingleDocument ? 'Translated Document' : 'Translated Documents';
+                    translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
+
+                    const readyMessage = document.createElement('div');
+                    readyMessage.className = 'ready-msg';
+                    readyMessage.textContent = readyMessageText;
+                    translatedDocuments.appendChild(readyMessage);
+                }
 
                 const downloadLink = document.createElement('a');
                 downloadLink.href = url;
@@ -401,12 +436,8 @@ async function startTranslation() {
                 icon.style.marginRight = '8px';
 
                 downloadLink.prepend(icon);
-
-                const container = document.getElementById('translatedDocuments');
-                container.appendChild(downloadLink);
-                container.appendChild(document.createElement('br'));
-
-                container.style.display = 'block';
+                translatedDocuments.appendChild(downloadLink);
+                translatedDocuments.appendChild(document.createElement('br'));
 
                 console.log('Translated document appended:', downloadLink.href);
             } else {
@@ -418,15 +449,37 @@ async function startTranslation() {
         }
     }
 
-    // Complete the progress bar when all translations are done
+    const endTime = Date.now();
+    const translationTimeMs = endTime - startTime;
+    const formattedTranslationTime = formatTime(translationTimeMs);
+
+    // Create a div to show the word count and time taken
+    const translationDetails = document.createElement('div');
+    translationDetails.className = 'translation-details';
+    translationDetails.innerHTML = `
+        <p>Time taken: ${formattedTranslationTime}</p>
+    `;
+    translatedDocuments.appendChild(translationDetails);
+
+    // Complete the progress bar
     completeProgress();
+    document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
+    document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
+
+    // Apply styles to the translatedDocuments container
+    translatedDocuments.style.display = 'block';
+    translatedDocuments.style.padding = '40px';
+    translatedDocuments.style.borderRadius = '8px';
+    translatedDocuments.style.backgroundColor = '#fff';
+    translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
+    translatedDocuments.style.marginLeft = '20rem';
+    translatedDocuments.style.marginTop = '5rem';
 }
 
 // Helper function to get selected languages
 function getSelectedLanguages() {
     const checkboxes = document.querySelectorAll('input[name="languages"]:checked');
-    const selectedLanguages = Array.from(checkboxes).map(checkbox => checkbox.value);
-    return selectedLanguages;
+    return Array.from(checkboxes).map(checkbox => checkbox.value);
 }
 
 // Helper function to get the selected document format
@@ -445,32 +498,14 @@ const icons = {
 
 function getDocumentIcon(format) {
     return icons[format] || icons['default'];
-
-translatedDocuments.style.display = 'block';
-translatedDocuments.style.padding = '40px';
-translatedDocuments.style.borderRadius = '8px';
-translatedDocuments.style.backgroundColor = '#fff';
-translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
-translatedDocuments.style.marginLeft = '20rem';
-translatedDocuments.style.marginTop = '5rem';
-clearInterval(window.progress); // Stop the progress bar
-document.querySelector(".circular-progress").style.display = 'none'; // Hide the progress bar
-document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
-
-// Function to get the document icon based on file format
-function getDocumentIcon(format) {
-    const icons = {
-        'pdf': 'https://cdn-icons-png.flaticon.com/128/337/337946.png',
-        'docx': 'https://cdn-icons-png.flaticon.com/128/716/716935.png',
-        'txt': 'https://cdn-icons-png.flaticon.com/128/337/337956.png'
-    };
-    return icons[format] || 'path/to/default-icon.png';
-}
 }
 
-
-
-
+// Helper function to format milliseconds into a readable time (minutes and seconds)
+function formatTime(ms) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return `${minutes} mins ${seconds < 10 ? '0' : ''}${seconds} secs`;
+}
 </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
