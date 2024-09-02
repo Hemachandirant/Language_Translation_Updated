@@ -173,7 +173,117 @@
     <footer class="bg-dark text-black text-center py-2">
         <p>&copy; 2024 - Wipro | <a href="privacy.html" class="text-black">Privacy Policy</a></p>
     </footer>
-
+    <script>
+        // Function to populate the table with document data
+        function populateTable(documents) {
+    const tbody = document.querySelector('.history-table tbody');
+    tbody.innerHTML = ""; // Clear any existing rows
+ 
+    documents.forEach(doc => {
+        const row = document.createElement('tr');
+ 
+        // Document Name
+        const docNameCell = document.createElement('td');
+        const docLink = document.createElement('a');
+        docLink.href = `http://localhost:8000/download/original/${doc.docID}`;
+        docLink.target = "_blank";
+        docLink.textContent = doc.name;
+        docNameCell.appendChild(docLink);
+        row.appendChild(docNameCell);
+ 
+        // Translated Document
+        const translatedCell = document.createElement('td');
+        if (doc.translated) {
+            const link = document.createElement('a');
+            link.href = `http://localhost:8000/download/translated/${doc.transID}`;
+            link.target = "_blank";
+            link.textContent = doc.translated;
+            translatedCell.appendChild(link);
+        } else {
+            translatedCell.textContent = "No Translations Available";
+        }
+        row.appendChild(translatedCell);
+ 
+        // Source Language
+        const sourceLangCell = document.createElement('td');
+        sourceLangCell.textContent = doc.sourceLang;
+        row.appendChild(sourceLangCell);
+ 
+        // Translated Language
+        const translatedLangCell = document.createElement('td');
+        translatedLangCell.textContent = doc.translatedLang || "N/A";
+        row.appendChild(translatedLangCell);
+ 
+        // Uploaded Date
+        const uploadedDateCell = document.createElement('td');
+        uploadedDateCell.textContent = doc.uploadedDate;
+        row.appendChild(uploadedDateCell);
+ 
+        // Action
+        const actionCell = document.createElement('td');
+        const downloadBtn = document.createElement('button');
+        downloadBtn.className = "btn btn-primary";
+        downloadBtn.textContent = "Download";
+        downloadBtn.onclick = function () {
+            window.open(docLink.href, '_blank');
+        };
+        actionCell.appendChild(downloadBtn);
+        row.appendChild(actionCell);
+ 
+        // Starred
+        const starredCell = document.createElement('td');
+        const starIcon = document.createElement('img');
+        starIcon.src = doc.starred ? "starred.png" : "unstarred.png";
+        starIcon.alt = doc.starred ? "Starred" : "Unstarred";
+        starIcon.className = "star-icon";
+        starIcon.width = 30;
+        starIcon.height = 30;
+        starIcon.onclick = function () {
+            toggleStar(starIcon, doc.docID);
+        };
+        starredCell.appendChild(starIcon);
+        row.appendChild(starredCell);
+ 
+        // Append the row to the table body
+        tbody.appendChild(row);
+    });
+}
+ 
+ 
+// Function to fetch documents from the backend
+async function fetchDocuments() {
+    try {
+        const response = await fetch('http://localhost:8000/documents/');
+        const documents = await response.json(); // Read the response body as JSON
+        console.log(documents);
+ 
+        // Call populateTable to render the fetched data
+        populateTable(documents);
+    } catch (error) {
+        console.error("Failed to fetch documents:", error);
+    }
+}
+ 
+// Function to toggle the starred status of a document
+async function toggleStar(starIcon, document_id) {
+    try {
+        const response = await fetch(`http://localhost:8000/documents/toggle_star/${document_id}`, {
+            method: 'POST'
+        });
+        if (response.ok) {
+            const newStatus = await response.json(); // Expected to return { starred: true/false }
+            starIcon.src = newStatus.starred ? "starred.png" : "unstarred.png";
+        } else {
+            console.error("Failed to toggle star status.");
+        }
+    } catch (error) {
+        console.error("Failed to toggle star status:", error);
+    }
+}
+ 
+// Call this function on page load or when needed
+document.addEventListener('DOMContentLoaded', fetchDocuments);
+</script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -3,144 +3,130 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document Translator</title>
+    <title>Document</title>
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <style>
       body {
         font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
       }
  
-      header {
-        background-color: white;
+     
+      .navbar {
+        background-color: #f8f9fa;
+        padding: 0; /* to logo takes full height */
         display: flex;
-        align-items: center; /* Center items vertically */
-        justify-content: space-between; /* Space items evenly across the header */
+        align-items: stretch; /* Ensure items stretch to full height */
+        justify-content: space-between;
         height: 80px;
-        padding: 0 20px; /* Add padding to the header */
-        position: relative;
+      }
+ 
+      .navbar-nav {
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+ 
+      .navbar-nav .nav-link {
+        margin-left: 4rem;
+        margin-right: 4rem;
+        color: #000;
+        font-weight: bold;
+        font-size: 18px;
+      }
+ 
+      .navbar-nav .nav-link.active {
+        color: #007bff;
+      }
+ 
+      .navbar-nav .nav-link:hover {
+        color: #007bff;
+      }
+ 
+      .demo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+        border: 2px solid #ffd700;
+        padding: 5px 20px;
+        border-radius: 5px;
+        align-self: center;
+       
+       
       }
  
       .logo {
-        position: relative;
-        z-index: 2; /* Ensure the logo is above other content */
-      }
-      .container {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* Distribute items across the container */
-      }
- 
-      .web-name {
         font-size: 2.5rem;
         font-weight: bold;
         color: white;
-        padding: 4rem 3rem;
         background-color: #1b2c41;
         clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        margin: 0 auto; /* Center horizontally */
-        position: absolute; /* Position in the middle of the header */
-        left: 50%;
-        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 3rem;
+        height: 100%;
+        line-height: 1;
+        flex-shrink: 0;
         z-index: 2;
       }
  
-      nav {
+      /* Hero Section */
+      .hero {
+        background-image: url("https://images.unsplash.com/photo-1508107536691-b1449928187d?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 90vh;
+        color: white;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        width: auto;
+        position: relative;
       }
  
-      .nav-links {
-        list-style-type: none;
-        display: flex;
-        gap: 4rem;
-        margin: 0;
-        padding: 0;
+      .hero-content {
+        background-color: rgba(255, 255, 255);
+        color: black;
+        padding: 3rem;
+        text-align: left;
+        max-width: 100%;
+        margin-top: 20px;
+     
       }
  
-      .nav-links li a {
-        text-decoration: none;
-        color: #1b2c41;
+      .hero-content h1 {
+        margin-top: 0;
+        font-size: 3rem;
         font-weight: bold;
-        font-size: 1.2rem;
       }
  
-      .demo-button {
+      .hero-content p {
+        font-size: 1.25rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+ 
+      .cta-button {
         background-color: #f7d035;
         padding: 10px 20px;
         border-radius: 5px;
         font-weight: bold;
         color: #1b2c41;
-      }
- 
-      .demo-button a {
         text-decoration: none;
-        color: inherit;
-        font-size: 16px;
-      }
- 
-      .hero {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 80px 80px;
-        background-image: url("https://images.unsplash.com/photo-1508107536691-b1449928187d?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 80vh;
-        color: white;
-        position: relative;
-      }
-      .hero-content {
-        max-width: 600px;
-        background-color: white;
-        color: black;
-        padding: 30px;
-        text-align: left;
-        z-index: 1;
-      }
- 
-      .hero-content h1 {
-        margin-top: 0;
-        font-size: 48px;
-      }
- 
-      .hero-content p {
-        font-size: 20px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-      }
- 
-      .cta-button {
-        width: 50%;
-        background-color: #f7d035;
-        padding: 15px 30px;
-        border-radius: 10px;
-        font-weight: bold;
-        color: #1b2c41;
-        text-decoration: none;
-        font-size: 20px;
+        font-size: 1.25rem;
         display: inline-block;
-        margin-top: 20px;
         text-align: center;
-        margin-left: auto;
-        margin-right: auto;
       }
  
+      /* Cards Section */
       .cards-section {
         display: flex;
         justify-content: space-around;
         padding: 0 50px;
-        margin-top: -100px;
+        margin-top: -7%;
         flex-wrap: wrap;
         box-sizing: border-box;
         position: relative;
@@ -149,7 +135,7 @@
  
       .card {
         background-color: white;
-        padding: 20px;
+        padding: 2%;
         text-align: center;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         flex: 1 1 calc(25% - 20px);
@@ -158,7 +144,8 @@
         transition: transform 0.3s ease;
         box-sizing: border-box;
         position: relative;
-        z-index: 2; /* Ensure cards are above the hero image */
+        z-index: 2;
+        border-radius: 0;
       }
  
       .card:hover {
@@ -169,6 +156,9 @@
         width: 50px;
         height: 50px;
         margin-bottom: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
       }
  
       .card h3 {
@@ -185,60 +175,113 @@
       footer {
         text-align: center;
         padding: 20px;
-        margin-top: 50px; /* Add margin to separate footer from content */
+        margin-top: 50px;
         width: 100%;
-        background-color: #f1f1f1; /* Set a background color */
-      }
- 
-      @media (max-width: 1024px) {
-        .card {
-          flex: 1 1 calc(50% - 20px);
-        }
+        background-color: #f1f1f1;
       }
  
       @media (max-width: 768px) {
-        .card {
-          flex: 1 1 100%;
+        .hero-content {
+          padding: 1.5rem;
         }
  
-        .cards-section {
-          padding: 0 20px;
-          width: calc(100% - 40px);
+        .hero-content h1 {
+          font-size: 2rem;
+        }
+ 
+        .hero-content p {
+          font-size: 1rem;
+        }
+ 
+        .cta-button {
+          padding: 10px 15px;
+          font-size: 1rem;
+        }
+ 
+        .logo {
+          font-size: 1.5rem;
+          padding: 1rem;
+        }
+ 
+        .navbar-nav .nav-link {
+          font-size: 16px;
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+ 
+        .demo {
+          font-size: 16px;
+          padding: 5px 10px;
         }
       }
     </style>
   </head>
   <body>
-    <header>
-      <div class="container">
-        <div class="logo">
-          <img src="wipro.png" alt="logo" width="220px" height="70px" />
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid">
+        <div class="navbar-brand d-flex align-items-center">
+            <img src="wipro.png"  alt="Logo" width="220px" height="70px" />
         </div>
-        <div class="web-name">WiLexi</div>
-        <nav>
-          <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Learn More</a></li>
-            <li><a href="#" class="demo-button">Demo</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+         
+       
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
  
+            <li class="nav-item logo">WiLexi</li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Learn More</a>
+            </li>
+ 
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+           
+            <li class="demo">
+                Demo
+              </li>
+          </ul>
+        </div>
+       
+      </div>
+    </nav>
+ 
+    <!-- Hero Section -->
     <section class="hero">
-      <div class="hero-content">
-        <h1>Welcome to Document Translator</h1>
-        <p>Your tool for easy document translations</p>
-        <a href="Translator.html" class="cta-button"
-          >Start Translating <i class="fas fa-arrow-right"></i
-        ></a>
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-8 col-lg-6">
+            <div class="hero-content">
+              <h1>Welcome to Document Translator</h1>
+              <p>Your tool for easy document translations</p>
+              <a href="translator.html" class="cta-button">Start Translating</a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
  
+    <!-- Cards Section -->
     <section class="cards-section">
       <div class="card">
         <img
-          src="https://cdn-icons-png.flaticon.com/512/4144/4144410.png"
+          src="https://cdn-icons-png.flaticon.com/128/2793/2793765.png"
           alt="Instant Translation"
         />
         <h3>Instant Translation</h3>
@@ -248,7 +291,7 @@
       </div>
       <div class="card">
         <img
-          src="https://cdn-icons-png.flaticon.com/512/4144/4144427.png"
+          src="https://cdn-icons-png.flaticon.com/128/3898/3898840.png"
           alt="Multilingual Support"
         />
         <h3>Multilingual Support</h3>
@@ -256,7 +299,7 @@
       </div>
       <div class="card">
         <img
-          src="https://cdn-icons-png.flaticon.com/512/4144/4144490.png"
+          src="https://cdn-icons-png.flaticon.com/128/1035/1035086.png"
           alt="Data Privacy"
         />
         <h3>Data Privacy</h3>
@@ -264,16 +307,25 @@
       </div>
       <div class="card">
         <img
-          src="https://cdn-icons-png.flaticon.com/512/4144/4144431.png"
+          src="https://cdn-icons-png.flaticon.com/128/10129/10129153.png"
           alt="Enterprise Solutions"
         />
-        <h3>Enterprise Solutions</h3>
-        <p>Custom translation services tailored to your business needs.</p>
+        <h3>Language Detection</h3>
+        <p>
+          Automatically detect the language of your uploaded documents to
+          streamline the translation process.
+        </p>
       </div>
     </section>
  
     <footer>
-      <p>© 2024 WiLexi. All Rights Reserved.</p>
+      <p>
+        &copy; 2024 - Wipro |
+        <a href="privacy.html" class="text-black">Privacy Policy</a>
+      </p>
     </footer>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    ></script>
   </body>
 </html>
