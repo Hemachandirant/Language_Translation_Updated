@@ -78,7 +78,7 @@
                     <div class="card">
                         <!-- <div class="card-body"> -->
                         <!-- <h5 class="card-title">Upload Document</h5> -->
-                        <div class="upload-drop-zone" id="drop-zone" style="height: 360px; width: 500px;">
+                        <div class="upload-drop-zone" id="drop-zone" style="height: 360px;">
                             <p>Drag files here</p>
                             <label for="documentUpload" class="file-input-label">
                                 <img src="upload.png" alt="Click to upload" class="img-fluid">
@@ -88,7 +88,7 @@
                             <p class="text-muted">Supports files up to 300MB in size</p>
                             <input type="file" class="form-control-file hidden-file-input" id="documentUpload" accept=".pdf,.doc,.docx,.txt,.ppt,.pptx">
                             <p id="file-info-wrapper" class="file-name" style="display: none;">Uploaded File: <p id="fileNameDisplay" class="mt-2"></p></p>
-                           
+                            
                             <div id="summarizeProgressWrapper">
                                 <span id="summarizeLabel" style="display: none;"><strong>Summarising...</strong></span>
                                 <img id="tickImg" src="check.png" alt="Checkmark" style="display: none; width: 20px; height: 20px; margin-left: 10px;" />
@@ -97,26 +97,26 @@
                                 </div>
                                
                             </div>
-                           
-                           
+                            
+                            
                         </div>
  
                         <!-- </div> -->
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="box" style="height: 360px; width: 700px;">
+                    <div class="box" style="height: 360px;">
                         <form>
                             <!-- First Row: Source and Target Language -->
                             <div class="row mb-4">
-                                <div class="col-md-6" style="padding-left: 50px;">
+                                <div class="col-md-6">
                                     <label for="sourceLanguage">Detected Source Language</label><br>
                                     <input type="text" class="Source_language" placeholder="Detected language" readonly>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="dropdown" style=" margin-top: 0.1rem; margin-left: 3rem;">
+                                    <div class="dropdown" style=" margin-top: 0.1rem;">
                                         <label for="targetLanguage" style="font-size: 16px;">Target Language</label><br>
-                                        <button class="Target_language" type="button" style="font-size: 16px;">Select Languages</button>
+                                        <button class="Target_language" type="button">Select Languages</button>
                                         <div class="dropdown-content" style="display:none;">
                                             <label><input type="checkbox" name="languages" value="german"> German</label>
                                             <label><input type="checkbox" name="languages" value="french"> French</label>
@@ -125,16 +125,16 @@
                                             <label><input type="checkbox" name="languages" value="spanish"> Spanish</label>
                                         </div>
                                     </div>
-                                    <div id="selectedLanguages" style="margin-left: 3rem;">Selected Languages: None</div>
+                                    <div id="selectedLanguages">Selected Languages: None</div>
                                 </div>
                             </div>
-               
+                
                             <!-- Second Row: Document Format in the center -->
                             <div class="row mb-4 justify-content-center">
-                                <div class="col-md-6" style="margin-top: -1rem; margin-left:5rem;">
+                                <div class="col-md-6" style="margin-top: -1rem;">
                                     <label for="documentFormat">Select Document Format</label><br>
                                     <div class="dropdown-format" data-control="checkbox-dropdown">
-                                        <label class="dropdown-format-label" style="font-size: 16px;">Select Format</label>
+                                        <label class="dropdown-format-label">Select Format</label>
                                         <div class="dropdown-list">
                                             <label class="dropdown-option">
                                                 <input type="radio" name="format-group" value="pdf" /> PDF (.pdf)
@@ -149,35 +149,30 @@
                                     </div>
                                 </div>
                             </div>
-               
+                
                             <!-- Third Row: Start Translating Button in the center -->
                             <div class="row mb-4 justify-content-center">
-                                <div class="col-md-6 text-center" style="margin-top: -2rem;">
+                                <div class="col-md-6 text-center" style="margin-top: -1rem;">
                                     <button type="button" id="startTranslateBtn" class="submitbutton" onclick="startTranslation()">Start Translating</button>
                                 </div>
                             </div>
-                           
-                         
+                
                             <!-- Fourth Row: Progress Bar -->
-                            <!-- <div class="row justify-content-center"> -->
+                            <div class="row justify-content-center">
                                 <div class="col-md-6">
-                                    <div id="translateProgressWrapper"  style="margin-top: 1rem; width: 27rem;margin-left: 6rem;">
-                                        <div class="estimated-time" style="display: none; margin-top: 10px; font-size: 14px; color: #666; text-align: center;">
-                                            Estimated time remaining: <span id="estimatedTime"></span>
-                                        </div>
+                                    <div id="translateProgressWrapper" class="mt-3" style="margin-top: 1rem;">
                                         <span id="translateLabel" style="display: none"><strong>Translating...</strong></span>
                                         <img id="checkImg" src="translatedcheck.png" alt="Checkmark" style="display: none; width: 20px; height: 20px; margin-left: 10px;" />
                                         <div id="translationProgressBar" class="progress" style="display: none;">
                                             <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                                         </div>
- 
                                     </div>
                                 </div>
-                            <!-- </div> -->
+                            </div>
                         </form>
                     </div>
                 </div>
-               
+                
             </div>
         </div>
  
@@ -281,7 +276,6 @@ async function detectLanguage(file) {
 }
  
  
- 
 function startSummarization() {
     let progressValue = 0;
     let progressEndValue = 100;
@@ -290,16 +284,129 @@ function startSummarization() {
     let summarizationProgress = setInterval(() => {
         progressValue += 1;
         document.querySelector('.summarization-progress').style.width = `${progressValue}%`;
-       
+        
         if (progressValue >= progressEndValue) {
             clearInterval(summarizationProgress);
             document.getElementById('summarizeLabel').textContent = 'Summarized!'; // Set the label to indicate completion
         }
     }, intervalTime);
 }
-   
+    
+function startProgress() {
+  const progressBar = $('#translationProgressBar');
+  const progressBarInner = progressBar.find('.progress-bar');
+  const translateLabel = $('#translateLabel');
+  const checkImg = $('#checkImg');
  
+  // Show the progress bar and "Translating..." label
+  progressBar.show();
+  translateLabel.show();
+  checkImg.hide(); // Ensure the checkmark image is hidden at the start
  
+  translateLabel.css({
+    'color':'#666666',
+    'margin-left':'15rem',
+      'text-align': 'center', // Center the text inside its container
+      'margin-right': 'auto'
+  });
+ 
+  let progress = 0;
+  const interval = setInterval(function () {
+      progress += 10;
+      progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(progress + '%');
+ 
+      if (progress >= 100) {
+          clearInterval(interval);
+          translateLabel.html('<strong>Translated!</strong>');
+          checkImg.show(); // Show the checkmark image
+ 
+          displayTranslatedDocuments(); // Display translated documents after completion
+      }
+  }, 1000);
+}
+ 
+function displayTranslatedDocuments() {
+  const targetLanguages = document.querySelectorAll('input[name="dropdown-group"]:checked');
+  const fileInput = document.getElementById('documentUpload');
+  const translatedDocuments = document.getElementById('translatedDocuments');
+ 
+  translatedDocuments.innerHTML = ''; // Clear previous content
+ 
+  const uploadedFileName = fileInput.files[0].name;
+  const fileExtension = uploadedFileName.split('.').pop();
+  const fileNameWithoutExtension = uploadedFileName.replace(`.${fileExtension}`, '');
+ 
+  targetLanguages.forEach(language => {
+    const languageCode = getLanguageCode(language.value);
+    const translatedFileName = `${fileNameWithoutExtension}_${languageCode}.docx`; // Ensure only .docx format
+ 
+    // Create the document container
+    const documentContainer = document.createElement('div');
+    documentContainer.classList.add('translated-document-container', 'mb-3', 'd-flex', 'align-items-center');
+ 
+    // Add the docx document icon
+    const iconImg = document.createElement('img');
+    iconImg.src = 'https://cdn-icons-png.flaticon.com/128/716/716935.png'; // docx icon
+    iconImg.alt = `docx icon`;
+    iconImg.classList.add('document-icon', 'me-3'); // Adjust the spacing and alignment
+    iconImg.style.width = '42px'; // Adjust icon size
+    iconImg.style.height = '42px'; // Maintain the aspect ratio
+ 
+    // Create the details container for file name, word count, and time
+    const detailsContainer = document.createElement('div');
+    detailsContainer.classList.add('details-container', 'd-flex', 'flex-column');
+ 
+    // Create the file link
+    const fileLink = document.createElement('a');
+    fileLink.href = `path/to/translated/files/${translatedFileName}`;
+    fileLink.textContent = translatedFileName;
+    fileLink.target = '_blank';
+    fileLink.classList.add('translated-file-link');
+ 
+    // Append link and details to the details container
+    detailsContainer.appendChild(fileLink);
+ 
+    // Append icon and details container to the document container
+    documentContainer.appendChild(iconImg);
+    documentContainer.appendChild(detailsContainer);
+ 
+    translatedDocuments.appendChild(documentContainer);
+  });
+ 
+  // Determine singular or plural text based on the number of documents
+  const isSingleDocument = targetLanguages.length === 1;
+  const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
+  const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
+ 
+  // Add the translated text and ready message
+  const title = document.createElement('h3');
+  title.className = 'translated-title';
+  title.textContent = translatedText;
+ 
+  const readyMessage = document.createElement('div');
+  readyMessage.className = 'ready-msg';
+  readyMessage.textContent = readyMessageText;
+ 
+  translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
+  translatedDocuments.appendChild(readyMessage);
+ 
+  // Show the translated documents section with padding
+  translatedDocuments.style.display = 'block';
+  translatedDocuments.style.padding = '40px';
+  translatedDocuments.style.borderRadius = '8px';
+  translatedDocuments.style.backgroundColor = '#fff';
+  translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
+  translatedDocuments.style.marginLeft = '22rem';
+  translatedDocuments.style.marginTop = '1rem';
+ 
+  translatedDocuments.addEventListener('mouseover', function() {
+    translatedDocuments.style.backgroundColor = '#f7f7f7'; // Change to your desired hover background color
+  });
+ 
+  translatedDocuments.addEventListener('mouseout', function() {
+    translatedDocuments.style.backgroundColor = '#fff'; // Reset the background color when not hovered
+  });
+}
  
 function completeProgress() {
     clearInterval(window.progress);
@@ -316,6 +423,43 @@ function completeProgress() {
     tickImg.style.display = 'block';
 }
  
+function getWordCount(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+ 
+        reader.onload = function(event) {
+            const content = event.target.result;
+ 
+            // Simple word count logic: splitting the text by spaces or newlines
+            const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
+            resolve(wordCount);
+        };
+ 
+        reader.onerror = function(event) {
+            reject("Error reading file");
+        };
+ 
+        // Read file content as text (handles .txt and similar formats)
+        if (file.type === "text/plain") {
+            reader.readAsText(file);
+        } else {
+            // Handle other file formats like .docx, .pdf, etc., using a library
+            reject("Unsupported file format for word count");
+        }
+    });
+}
+function getLanguageCode(language) {
+  const languageCodes = {
+      'German': 'ge',
+      'French': 'fr',
+      'Spanish': 'sp',
+      'Dutch': 'dt',
+      'Mandarin': 'mand',
+      'Tamil': 'ta',
+      // Add more languages and their codes here if needed
+  };
+  return languageCodes[language] || 'en';
+}
  
 // Helper function to format milliseconds into a readable time (minutes and seconds)
 function formatTime(ms) {
@@ -327,8 +471,8 @@ function formatTime(ms) {
 async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
-    const selectedLanguages = getSelectedLanguages(); // This holds the selected languages
-    const documentFormat = getSelectedDocumentFormat(); // This will get the selected document format
+    const selectedLanguages = getSelectedLanguages();
+    const documentFormat = getSelectedDocumentFormat();
  
     if (!file) {
         alert("Please upload a file before starting the translation.");
@@ -344,9 +488,10 @@ async function startTranslation() {
         alert("Please select a document format.");
         return;
     }
+    
  
-    // Start the progress bar with an estimated duration (e.g., 2 minutes)
-    const estimatedTimeMs = 120000; // 2 minutes in milliseconds
+    // Start the progress bar with an estimated duration of 2 minutes (120 seconds)
+    const estimatedTimeMs = 17000; // 2 minutes in milliseconds
     startProgress(estimatedTimeMs);
  
     // Show the estimated time container
@@ -361,60 +506,27 @@ async function startTranslation() {
     const intervalId = setInterval(() => {
         const currentTime = estimatedTimeSpan.textContent.split(":");
         const remainingTimeMs = (parseInt(currentTime[0]) * 60000) + (parseInt(currentTime[1]) * 1000) - 1000;
-       
+        
         if (remainingTimeMs >= 0) {
             estimatedTimeSpan.textContent = formatTime(remainingTimeMs);
         } else {
             clearInterval(intervalId);
         }
     }, 1000);
- 
-    const startTime = Date.now(); // Capture the start time
- 
-    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
+    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
  
     const isSingleDocument = selectedLanguages.length === 1;
-    const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
     const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
  
-    const title = document.createElement('h3');
-    title.className = 'translated-title';
-    title.textContent = translatedText;
- 
-    const readyMessage = document.createElement('div');
-    readyMessage.className = 'ready-msg';
-    readyMessage.textContent = readyMessageText;
- 
-    translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
-    translatedDocuments.appendChild(readyMessage);
-    // Apply styles to the translatedDocuments container
-    translatedDocuments.style.display = 'block';
-    translatedDocuments.style.padding = '20px';
-    translatedDocuments.style.width = '88%';
-    translatedDocuments.style.height = '150px'; // Set a fixed height to enable vertical scrolling
-    translatedDocuments.style.overflowX = 'auto'; // Enable horizontal scrolling
-    translatedDocuments.style.overflowY = 'auto'; // Enable vertical scrolling
-    translatedDocuments.style.borderRadius = '8px';
-    translatedDocuments.style.backgroundColor = '#fff';
-    translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
-    translatedDocuments.style.marginLeft = '3rem';
-    translatedDocuments.style.marginTop = '7%';
- 
-    translatedDocuments.addEventListener('mouseover', function() {
-        translatedDocuments.style.backgroundColor = '#f7f7f7'; // Change to your desired hover background color
-    });
-    
-    translatedDocuments.addEventListener('mouseout', function() {
-        translatedDocuments.style.backgroundColor = '#fff'; // Reset the background color when not hovered
-    });
+    const startTime = Date.now();
  
     for (const language of selectedLanguages) {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("language", language);
-        formData.append("output_format", documentFormat); // Correct key for output format
+        formData.append("output_format", documentFormat);
  
         try {
             const response = await fetch('http://127.0.0.1:8001/upload-summarize-translate/', {
@@ -426,6 +538,19 @@ async function startTranslation() {
                 const blob = await response.blob();
                 const url = URL.createObjectURL(blob);
  
+                // Show the title and ready message after the first successful translation
+                if (!translatedDocuments.querySelector('.translated-title')) {
+                    const title = document.createElement('h3');
+                    title.className = 'translated-title';
+                    title.textContent = isSingleDocument ? 'Translated Document' : 'Translated Documents';
+                    translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
+ 
+                    const readyMessage = document.createElement('div');
+                    readyMessage.className = 'ready-msg';
+                    readyMessage.textContent = readyMessageText;
+                    translatedDocuments.appendChild(readyMessage);
+                }
+ 
                 const downloadLink = document.createElement('a');
                 downloadLink.href = url;
                 downloadLink.download = `${fileNameWithoutExtension}_${language}.${documentFormat}`;
@@ -435,14 +560,12 @@ async function startTranslation() {
                 const icon = document.createElement('img');
                 icon.src = getDocumentIcon(documentFormat);
                 icon.alt = `${documentFormat} icon`;
-                icon.style.width = '42px';
-                icon.style.height='42px';
+                icon.style.width = '24px';
                 icon.style.marginRight = '8px';
  
                 downloadLink.prepend(icon);
- 
                 translatedDocuments.appendChild(downloadLink);
-                translatedDocuments.appendChild(document.createElement('br'));
+                // translatedDocuments.appendChild(document.createElement('br'));
  
                 console.log('Translated document appended:', downloadLink.href);
             } else {
@@ -454,12 +577,6 @@ async function startTranslation() {
         }
     }
  
-    // Complete the progress bar when all translations are done
-    completeProgress();
- 
-    // estimatedTimeContainer.style.display = 'none';
-   
-    // Calculate the translation time
     const endTime = Date.now();
     const translationTimeMs = endTime - startTime;
     const formattedTranslationTime = formatTime(translationTimeMs);
@@ -467,46 +584,27 @@ async function startTranslation() {
     // Create a div to show the word count and time taken
     const translationDetails = document.createElement('div');
     translationDetails.className = 'translation-details';
-    translationDetails.innerHTML = `<p>Time taken: ${formattedTranslationTime}</p>`;
+    translationDetails.innerHTML = `
+        <p>Time taken: ${formattedTranslationTime}</p>
+    `;
     translatedDocuments.appendChild(translationDetails);
  
-    // Hide the estimated time container once the files are ready
+    // Complete the progress bar
+    completeProgress();
     clearInterval(intervalId);
+    // Hide the estimated time container once the files are ready
+    estimatedTimeContainer.style.display = 'none';
     document.querySelector(".translationProgressBar").style.display = 'none'; // Hide the progress bar
     document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
-}
  
-function startProgress() {
-  const progressBar = $('#translationProgressBar');
-  const progressBarInner = progressBar.find('.progress-bar');
-  const translateLabel = $('#translateLabel');
-  const checkImg = $('#checkImg');
- 
-  // Show the progress bar and "Translating..." label
-  progressBar.show();
-  translateLabel.show();
-  checkImg.hide(); // Ensure the checkmark image is hidden at the start
- 
-  translateLabel.css({
-    'color':'#666666',
-    'margin-left':'10rem',
-      'text-align': 'center', // Center the text inside its container
-      'margin-right': 'auto'
-  });
- 
-  let progress = 0;
-  const interval = setInterval(function () {
-      progress += 10;
-      progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(progress + '%');
- 
-      if (progress >= 100) {
-          clearInterval(interval);
-          translateLabel.html('<strong>Translated!</strong>');
-          checkImg.show(); // Show the checkmark image
- 
-        //   displayTranslatedDocuments();
-      }
-  }, 1000);
+    // Apply styles to the translatedDocuments container
+    translatedDocuments.style.display = 'block';
+    translatedDocuments.style.padding = '40px';
+    translatedDocuments.style.borderRadius = '8px';
+    translatedDocuments.style.backgroundColor = '#fff';
+    translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
+    translatedDocuments.style.marginLeft = '20rem';
+    translatedDocuments.style.marginTop = '5rem';
 }
  
 // Helper function to get selected languages
