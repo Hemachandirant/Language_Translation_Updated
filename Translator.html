@@ -117,8 +117,20 @@
                                         <label><input type="checkbox" name="languages" value="German"> German</label>
                                         <label><input type="checkbox" name="languages" value="French"> French</label>
                                         <label><input type="checkbox" name="languages" value="Dutch"> Dutch</label>
-                                        <label><input type="checkbox" name="languages" value="Mandarin"> Mandarin</label>
+                                        <label><input type="checkbox" name="languages" value="Chinese"> Chinese</label>
                                         <label><input type="checkbox" name="languages" value="Spanish"> Spanish</label>
+                                        <label><input type="checkbox" name="languages" value="Arabic"> Arabic</label>
+                                        <label><input type="checkbox" name="languages" value="Hindi"> Hindi</label>
+                                        <label><input type="checkbox" name="languages" value="Portuguese"> Portuguese</label>
+                                        <label><input type="checkbox" name="languages" value="Russian"> Russian</label>
+                                        <label><input type="checkbox" name="languages" value="Japanese"> Japanese</label>
+                                        <label><input type="checkbox" name="languages" value="Korean"> Korean</label>
+                                        <label><input type="checkbox" name="languages" value="Italian"> Italian</label>
+                                        <label><input type="checkbox" name="languages" value="Turkish"> Turkish</label>
+                                        <label><input type="checkbox" name="languages" value="Urdu"> Urdu</label>
+                                        <label><input type="checkbox" name="languages" value="Persian"> Persian</label>
+                                        <label><input type="checkbox" name="languages" value="Swahili"> Swahili</label>
+
                                     </div>
                                 </div>
                                 <p id="selectedLanguages" style="margin-left: 3rem;" >Selected Languages: None</p> <!-- Added this line -->
@@ -259,8 +271,8 @@
  
            
        
-        let progressInterval;
-let progress = 0;
+        let progress = 0; // Initialize progress variable
+let progressInterval; // To store the interval reference
 
 function startProgress() {
     const progressBar = $('#translationProgressBar');
@@ -281,34 +293,36 @@ function startProgress() {
 
     console.log('Progress started...');
 
-    const maxProgress = 30; // Maximum progress before slowing down
-    const intervalTime = 100; // Update every 100 milliseconds
-    const fastProgressIncrement = 1; // Fast increment up to 70%
-    const slowProgressIncrement = 0.05; // Slow increment after 70%
+    const maxFastProgress = 30; // Fast progress until 70%
+    const fastIntervalTime = 1000; // Fast update every 100 milliseconds
+    const slowIntervalTime = 200; // Slow update every 200 milliseconds
+    const fastProgressIncrement = 10; // Fast increment up to 70%
+    const slowProgressIncrement = 0.5; // Slow increment after 70%
 
+    progress = 0; // Reset progress
+
+    // Start fast progress until 70%
     progressInterval = setInterval(() => {
-        if (progress < maxProgress) {
+        if (progress < maxFastProgress) {
             progress += fastProgressIncrement;
+            progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
         } else {
-            progress += slowProgressIncrement;
-        }
-        
-        progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
+            clearInterval(progressInterval); // Stop the fast interval
 
-        if (progress >= 100) {
-            clearInterval(progressInterval);
-            $('#translationProgressBar').hide();  // Hide progress bar after completion
-            $('#checkImg').show();  // Show the checkmark image
-            
-            // Show "Translated!" message
-            $('#translateLabel').html('<strong>Translated!</strong>');
-            $('#translateLabel').css('color', '#28a745'); // Optional: Change color to green
+            // Start slow progress after reaching 70%
+            progressInterval = setInterval(() => {
+                if (progress < 90) {
+                    progress += slowProgressIncrement;
+                    progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
+                }
+            }, slowIntervalTime);
         }
-    }, intervalTime);
+    }, fastIntervalTime);
 }
 
 function completeProgress() {
-    clearInterval(progressInterval); // Stop the current progress
+    clearInterval(progressInterval); // Stop the slow progress
+
     const progressBarInner = $('#translationProgressBar').find('.progress-bar');
 
     // Fast completion to 100%
@@ -332,17 +346,46 @@ async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
     const selectedLanguages = getSelectedLanguages();
-
+    // const selectedLanguage = "French";
+    const userId = 1; // Assuming you have an input field for the user ID
+    var originalDocumentId=0
+ 
+    const formDataFordocument = new FormData();
+    formDataFordocument.append("file", file);
+    formDataFordocument.append("language", selectedLanguages);
+    formDataFordocument.append("user_id", userId);
+ 
+    try {
+        const response = await fetch('http://127.0.0.1:8006/upload-original-document/', {
+            method: 'POST',
+            body: formDataFordocument,
+        });
+        console.log(response);
+ 
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }else{
+            const data = await response.json(); // Parse the JSON content
+            originalDocumentId = data.document_id; // Extract the document_id
+            console.log(originalDocumentId);
+        }
+ 
+       
+ 
+    } catch (error) {
+        console.error('Error during the storing process:', error);
+        alert('There was an error during the original document DB storing process. Please try again.');
+    }
+ 
     if (!file) {
         alert("Please upload a file before starting the translation.");
         return;
     }
-
+ 
     if (selectedLanguages.length === 0) {
         alert("Please select at least one target language.");
         return;
     }
-
     document.getElementById("translateLabel").style.display = 'inline';
     startProgress();
 
