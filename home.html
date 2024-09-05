@@ -3,22 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Document Translator</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet"> -->
+ 
     <style>
       body {
         font-family: Arial, sans-serif;
       }
  
-     
       .navbar {
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
         z-index: 1000;
         background-color: #f8f9fa;
         padding: 0;
@@ -26,7 +30,6 @@
         align-items: stretch;
         justify-content: space-between;
         height: 80px;
-       
       }
  
       .navbar-nav {
@@ -37,8 +40,8 @@
       }
  
       .navbar-nav .nav-link {
-        margin-left: 4rem;
-        margin-right: 4rem;
+        margin-left: 3rem;
+        margin-right: 3rem;
         color: #000;
         font-weight: bold;
         font-size: 18px;
@@ -52,25 +55,42 @@
         color: #007bff;
       }
  
-     
+      .logo-wrapper {
+  position: relative;
+}
  
-      .logo {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: white;
-        background-color: #1b2c41;
-        clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 4rem 3rem;
-        height: 100%;
-        line-height: 1;
-        flex-shrink: 0;
-        z-index: 2;
-       
-      }
-      .container{
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  background-color: #1b2c41;
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 3rem;
+  line-height: 1;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+ 
+.logo-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);
+  background-color: #f8f9fa;
+  z-index: 0;
+  padding: 85px;
+  box-sizing: border-box;
+}
+ 
+ 
+      .container {
         margin-left: 2.7% !important;
       }
       /* Hero Section */
@@ -93,7 +113,7 @@
         text-align: left;
         max-width: 100%;
         margin-top: 20px;
-       
+        margin-bottom: 20px;
       }
  
       .hero-content h1 {
@@ -104,9 +124,10 @@
       }
  
       .hero-content p {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         margin-top: 1rem;
         margin-bottom: 1rem;
+        padding-left: 2%;
       }
  
       .cta-button {
@@ -117,10 +138,16 @@
         color: #1b2c41;
         text-decoration: none;
         font-size: 1.25rem;
-        display: inline-block;
+        display: flex;
+        justify-content: center;
+        width: 96%;
         text-align: center;
+        margin-left: 2%;
       }
- 
+      i{
+        align-self: center;
+        margin-left: 1%;
+      }
       /* Cards Section */
       .cards-section {
         display: flex;
@@ -179,17 +206,18 @@
         width: 100%;
         background-color: #f1f1f1;
       }
-      a{
-        color:green;
+      a {
+        color: green;
+      }
+      footer p{
+        margin-bottom: 0;
       }
       .signout-container {
-       
         align-items: center;
         margin-left: 5%;
-       
       }
       .signout-button {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: bold;
         color: #007bff;
         border: 2px solid #ffd700;
@@ -201,6 +229,7 @@
       .signout-button:hover {
         color: #0056b3;
       }
+ 
       @media (max-width: 768px) {
         .hero-content {
           padding: 1.5rem;
@@ -236,18 +265,17 @@
         }
       }
     </style>
-     <script defer src="authConfig.js"></script>
-     <script defer src="authPopup.js"></script>
-     <script src="https://alcdn.msauth.net/browser/2.19.0/js/msal-browser.min.js"></script>
+    <script defer src="authConfig.js"></script>
+    <script defer src="authPopup.js"></script>
+    <script src="https://alcdn.msauth.net/browser/2.19.0/js/msal-browser.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container-fluid">
         <div class="navbar-brand d-flex align-items-center">
-            <img src="wipro.png"  alt="Logo" width="220px" height="70px" />
+          <img src="wipro.png" alt="Logo" width="220px" height="70px" />
         </div>
-         
-       
+ 
         <button
           class="navbar-toggler"
           type="button"
@@ -262,29 +290,30 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" href="finalhome.html">Home</a>
+              <a class="nav-link active" href="home.html">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about2.html">About</a>
+              <a class="nav-link" href="about.html">About</a>
             </li>
  
-            <li class="nav-item logo">WiLexi</li>
-         
+            <li class="nav-item logo-wrapper">
+              <div class="logo">WiLexi</div>
+            </li>
  
             <li class="nav-item">
               <a class="nav-link" href="#">Contact</a>
             </li>
-           
-            <li class="nav-item">
  
+            <li class="nav-item">
               <a class="nav-link" href="#">Demo</a>
-              </li>
-              <li class="signout-container">
-                <button class="signout-button" onClick="signOut()" href="#">Signout</button>
-              </li>
+            </li>
+            <li class="signout-container">
+              <button class="signout-button" onClick="signOut()" href="#">
+                Signout
+              </button>
+            </li>
           </ul>
         </div>
-       
       </div>
     </nav>
  
@@ -296,7 +325,7 @@
             <div class="hero-content">
               <h1>Welcome to Document Translator</h1>
               <p>Your tool for easy document translations</p>
-              <a href="translator.html" class="cta-button">Start Translating</a>
+              <a href="translator.html" class="cta-button">Start Translating<i class="fas fa-arrow-right"></i> </a>
             </div>
           </div>
         </div>
@@ -345,10 +374,8 @@
     </section>
  
     <footer class="text-black text-center py-2">
-      <p>&copy; 2024 - Wipro | <a href="privacy.html" class="text-black">Privacy Policy</a></p>
+      <p>&copy; 2024 - Wipro | <a href="privacy.html">Privacy Policy</a></p>
   </footer>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

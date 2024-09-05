@@ -409,40 +409,69 @@ async function startTranslation() {
     translatedDocuments.appendChild(readyMessage);
 
     const startTime = Date.now();
-    for (const language of selectedLanguages) {
-        const formData = new FormData();
-        formData.append("file", file);
-        const targetLangCode = language;
+for (const language of selectedLanguages) {
+    const formData = new FormData();
+    formData.append("file", file);
+   
+    // Map the language to its corresponding code
+    // const targetLangCode = language_code_mapping[language];
+    const targetLangCode = language;
+    if (targetLangCode) {
         formData.append("target_lang", targetLangCode);
-
+    } else {
+        console.error(`Language not found in mapping: ${language}`);
+    }  
+ 
         try {
             const response = await fetch('http://127.0.0.1:8005/translate-document/', {
                 method: 'POST',
                 body: formData,
             });
-
+ 
             if (response.ok) {
                 const blob = await response.blob();
-                const downloadUrl = window.URL.createObjectURL(blob);
+                console.log("uploded translated")
+ 
+                const formDataForTranslatedDocument = new FormData();
+                formDataForTranslatedDocument.append('user_id', userId);
+                formDataForTranslatedDocument.append('language', selectedLanguage);
+                formDataForTranslatedDocument.append('file', fileInput.files[0]); // Ensure this is pointing to the correct file input
 
+ 
+                try {
+                    const storeResponse = await fetch('http://127.0.0.1:8006/upload-original-document/', {
+                        method: 'POST',
+                        body: formDataForTranslatedDocument,
+                    });
+ 
+                    if (!storeResponse.ok) {
+                        throw new Error(`HTTP error! Status: ${storeResponse.status}`);
+                    }
+                const downloadUrl = window.URL.createObjectURL(blob);
+ 
                 const downloadLink = document.createElement('a');
                 downloadLink.href = downloadUrl;
                 downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
                 downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
-
+ 
+                // Create an image element for the icon
                 const icon = document.createElement('img');
                 icon.src = 'https://cdn-icons-png.flaticon.com/128/716/716935.png';
                 icon.alt = 'Word Icon';
-                icon.style.width = '42px';
-                icon.style.height = '42px';
-                icon.style.marginRight = '5px';
-
+                icon.style.width = '16px'; // Adjust size as needed
+                icon.style.height = '16px'; // Adjust size as needed
+                icon.style.marginRight = '5px'; // Space between icon and text
+ 
+                // Prepend the icon to the download link
                 downloadLink.prepend(icon);
+ 
                 translatedDocuments.appendChild(downloadLink);
                 translatedDocuments.appendChild(document.createElement('br'));
-
-                // Once the API is fetched, complete the progress bar
-                completeProgress();
+ 
+                } catch (error) {
+                        console.error('Error during the storing process:', error);
+                        alert('There was an error during the DB storing process. Please try again.');
+                    }
             } else {
                 alert(`Failed to process the file for language: ${language}. Please try again.`);
             }
