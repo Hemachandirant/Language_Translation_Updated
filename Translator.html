@@ -14,15 +14,17 @@
  
 <body>
     <header class="bg-dark text-black text-center py-2">
-        <div class="row mt-1">
-            <div class="col-md-3">
-                <h1><b>WiLexi</b></h1>
+        <nav class="navbar">
+            <div class="container-fluid">
+                <div class="col-md-12 text-right">
+                        <img src="wipro.png" alt="Logo" width="220px" height="70px" style="margin-right: -2rem;">
+                </div>
+                <div class="navbar-center">
+                    WiLexi
+                </div>
             </div>
-            <div class="col-md-9 text-right">
-                <img src="wipro.png" alt="logo" width="220px" height="70px">
-            </div>
-        </div>
-    </header>
+        </nav>
+</header>
  
     <!-- <header class="bg-dark text-black py-2">
         <div class="container-fluid">
@@ -78,7 +80,7 @@
                     <div class="card">
                         <!-- <div class="card-body"> -->
                         <!-- <h5 class="card-title">Upload Document</h5> -->
-                        <div class="upload-drop-zone" id="drop-zone" style="height: 260px; margin-left: -3rem;">
+                        <div class="upload-drop-zone" id="drop-zone" style="height: 280px; margin-left: 0rem; width: 700px;">
                             <p>Drag files here</p>
                             <label for="documentUpload" class="file-input-label">
                                 <img src="upload.png" alt="Click to upload" class="img-fluid">
@@ -100,15 +102,15 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="box" style="height: 260px;">
+                    <div class="box" style="height: 280px; margin-right: 7%; width: 700px;">
                         <div class="row align-items-center">
                             <!-- First Row: Source and Target Language -->
-                            <div class="col-md-6" style="margin-top: -3rem; position: relative;">
+                            <div class="col-md-6" style="margin-top: -3rem; position: relative; padding-left: 50px;">
                                 <label for="sourceLanguage">Detected source language</label><br>
                                 <input type="text" class="Source_language" placeholder="Detected language" readonly>
                             </div>
                             <div class="col-md-6">
-                                <div class="dropdown" style="margin-top: -0.4rem;">
+                                <div class="dropdown" style="margin-top: -0.4rem; margin-left: 3rem;">
                                     <label for="targetLanguage" style="font-size: 16px;">Target language</label>
                                     <button class="Target_language" type="button">Select Languages</button>
                                     <div class="dropdown-content" style="display:none;">
@@ -119,7 +121,7 @@
                                         <label><input type="checkbox" name="languages" value="Spanish"> Spanish</label>
                                     </div>
                                 </div>
-                                <p id="selectedLanguages">Selected Languages: None</p> <!-- Added this line -->
+                                <p id="selectedLanguages" style="margin-left: 3rem;" >Selected Languages: None</p> <!-- Added this line -->
                                
                             </div>
                            
@@ -128,14 +130,14 @@
                          <!-- Second Row: Start Translating Button -->
                          <div class="row mt-3">
                             <div class="col-md-12 text-center">
-                                <button type="button" id="startTranslateBtn" class="submitbutton" style="margin-top: -1rem;" onclick="startTranslation()">Start Translating</button>
+                                <button type="button" id="startTranslateBtn" class="submitbutton" style="margin-top: -3rem;" onclick="startTranslation()">Start Translating</button>
                             </div>
                         </div>
                
                         <!-- Third Row: Progress Bar -->
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                <div id="translateProgressWrapper" style="margin-top: 0rem; margin-left: 11rem;">
+                                <div id="translateProgressWrapper" style="margin-top: 0.5rem; margin-left: 7rem;">
                                     <span id="translateLabel" style="display: none"><strong>Translating...</strong></span>
                                     <img id="checkImg" src="translatedcheck.png" alt="Checkmark" style="display: none; width: 20px; height: 20px; margin-left: 10px;" />
                                     <div id="translationProgressBar" class="progress" style="display: none;">

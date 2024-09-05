@@ -1,18 +1,18 @@
-// // $(document).ready(function() {
-// //   $("#menu-toggle").click(function(e) {
-// //       e.preventDefault();
-// //       $("#wrapper").toggleClass("toggled");
-// //   });
+$(document).ready(function() {
+  $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+  });
 
-// //   $('#loginForm').submit(function(e) {
-// //       e.preventDefault();
-// //       window.location.href = "home.html";
-// //   });
+  $('#loginForm').submit(function(e) {
+      e.preventDefault();
+      window.location.href = "home.html";
+  });
 
-// //   $('#getStartedBtn').click(function() {
-// //       window.location.href = "document_translator.html";
-// //   });
-// // });
+  $('#getStartedBtn').click(function() {
+      window.location.href = "document_translator.html";
+  });
+});
 
 // // // Drag and Drop
 // // document.addEventListener('DOMContentLoaded', function () {
@@ -301,8 +301,35 @@
 
 
 
+function createOverlay() {
+  // Create the overlay element
+  const overlay = document.createElement('div');
+  overlay.id = 'logout-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
+  overlay.style.color = 'white';
+  overlay.style.display = 'flex';
+  overlay.style.justifyContent = 'center';
+  overlay.style.alignItems = 'center';
+  overlay.style.fontSize = '1.5rem';
+  overlay.style.fontWeight = 'bold';
+  overlay.style.zIndex = '1000';
+  overlay.innerText = 'Logging out... Please wait';
+ 
+  // Append the overlay to the body
+  document.body.appendChild(overlay);
+}
+ 
 function logout() {
-  // Your logout logic here
-  // alert("Logging out...");
-  window.location.href = "login.html"; // Replace with your actual logout URL
+  // Create and show the overlay
+  createOverlay();
+ 
+  // Redirect after 5 seconds
+  setTimeout(function() {
+    window.location.href = 'login.html'; // Replace with your actual logout URL
+  }, 5000); // 5000 milliseconds = 5 seconds
 }

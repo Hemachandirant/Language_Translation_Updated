@@ -405,11 +405,11 @@ window.onclick = function(event) {
 
 
 
-function logout() {
-  // Your logout logic here
-  // alert("Logging out...");
-  window.location.href = "login.html"; // Replace with your actual logout URL
-}
+// function logout() {
+//   // Your logout logic here
+//   // alert("Logging out...");
+//   window.location.href = "login.html"; // Replace with your actual logout URL
+// }
 
 
 document.addEventListener('DOMContentLoaded', function () {
