@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiTrans - Document Translator</title>
+    <title>WiLexi - Document Translator</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styleDT.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -20,7 +20,7 @@
                         <img src="wipro.png" alt="Logo" width="220px" height="70px" style="margin-right: -2rem;">
                 </div>
                 <div class="navbar-center">
-                    WiLexi
+                   <a href="home.html" style="text-decoration: none; color: white;"> WiLexi </a>
                 </div>
             </div>
         </nav>
@@ -43,7 +43,7 @@
         <div class="bg-dark border-right" id="sidebar-wrapper">
             <div class="sidebar-heading text-black"><i class="fas fa-bars" id="menu-toggle"></i></div>
             <div class="list-group list-group-flush">
-                <a href="Translator.html" class="list-group-item list-group-item-action bg-dark text-black">
+                <a href="translator.html" class="list-group-item list-group-item-action bg-dark text-black">
                     <i class="fas fa-language sidebar-icon"></i> <span class="sidebar-text">Translator</span>
                 </a>
                 <a href="summary.html" class="list-group-item list-group-item-action bg-dark text-black">
@@ -130,12 +130,13 @@
                                         <label><input type="checkbox" name="languages" value="Urdu"> Urdu</label>
                                         <label><input type="checkbox" name="languages" value="Persian"> Persian</label>
                                         <label><input type="checkbox" name="languages" value="Swahili"> Swahili</label>
-
                                     </div>
                                 </div>
-                                <p id="selectedLanguages" style="margin-left: 3rem;" >Selected Languages: None</p> <!-- Added this line -->
-                               
+                                <div id="selectedLanguagesWrapper" style="margin-left: 3rem; width: 70%; overflow-x: auto; white-space: nowrap;  padding: 10px;">
+                                    <p id="selectedLanguages" style="display: inline;">Selected Languages: None</p>
+                                </div>
                             </div>
+                            
                            
                         </div>
                
@@ -201,16 +202,19 @@
             return selectedLanguages;
         }
        
-        // Function to update the display of selected languages
+     // Function to update the display of selected languages with horizontal scroll support
         function updateSelectedLanguagesDisplay() {
             var selectedLanguages = getSelectedLanguages();
             var displayElement = document.getElementById('selectedLanguages');
+            
             if (selectedLanguages.length > 0) {
                 displayElement.textContent = 'Selected Languages: ' + selectedLanguages.join(', ');
             } else {
                 displayElement.textContent = 'Selected Languages: None';
             }
         }
+
+
        
         // Event listener to toggle the dropdown menu for language selection
         document.querySelector('.Target_language').addEventListener('click', function(event) {
@@ -346,9 +350,8 @@ async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
     const selectedLanguages = getSelectedLanguages();
-    // const selectedLanguage = "French";
     const userId = 1; // Assuming you have an input field for the user ID
-    var originalDocumentId=0
+    let originalDocumentId = 0;
  
     const formDataFordocument = new FormData();
     formDataFordocument.append("file", file);
@@ -360,18 +363,13 @@ async function startTranslation() {
             method: 'POST',
             body: formDataFordocument,
         });
-        console.log(response);
- 
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
-        }else{
+        } else {
             const data = await response.json(); // Parse the JSON content
             originalDocumentId = data.document_id; // Extract the document_id
-            console.log(originalDocumentId);
         }
- 
-       
- 
     } catch (error) {
         console.error('Error during the storing process:', error);
         alert('There was an error during the original document DB storing process. Please try again.');
@@ -386,6 +384,7 @@ async function startTranslation() {
         alert("Please select at least one target language.");
         return;
     }
+
     document.getElementById("translateLabel").style.display = 'inline';
     startProgress();
 
@@ -397,16 +396,39 @@ async function startTranslation() {
     const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
     const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
 
+    // Create a container for the title and ready message, outside the translated documents section
+    const translationHeaderContainer = document.createElement('div');
+    translationHeaderContainer.className = 'translation-header-container';
+    translationHeaderContainer.style.textAlign = 'center';  // Center the title and message
+    translationHeaderContainer.style.marginBottom = '20px'; // Add spacing between the header and the document links
+
     const title = document.createElement('h3');
     title.className = 'translated-title';
     title.textContent = translatedText;
+    title.style.marginTop = '3rem'; // Margin for spacing above the title
+
 
     const readyMessage = document.createElement('div');
     readyMessage.className = 'ready-msg';
     readyMessage.textContent = readyMessageText;
+    readyMessage.style.marginTop = '0.01rem';
 
-    translatedDocuments.insertBefore(title, translatedDocuments.firstChild);
-    translatedDocuments.appendChild(readyMessage);
+    translationHeaderContainer.appendChild(title);
+    translationHeaderContainer.appendChild(readyMessage);
+
+    // Insert the header container above the translated documents container
+    translatedDocuments.parentNode.insertBefore(translationHeaderContainer, translatedDocuments);
+
+    const documentLinksContainer = document.createElement('div');
+    documentLinksContainer.className = 'document-links-container';
+    documentLinksContainer.style.display = 'flex';
+    documentLinksContainer.style.overflowX = 'auto';  // Enable horizontal scroll
+    documentLinksContainer.style.whiteSpace = 'nowrap';  // Prevent line breaks
+    documentLinksContainer.style.marginTop = '20px';  // Add some spacing
+
+    translatedDocuments.innerHTML = '';  // Clear previous content
+
+    translatedDocuments.appendChild(documentLinksContainer);
 
     const startTime = Date.now();
     for (const language of selectedLanguages) {
@@ -425,10 +447,17 @@ async function startTranslation() {
                 const blob = await response.blob();
                 const downloadUrl = window.URL.createObjectURL(blob);
 
+                // Create the document link and its corresponding time
+                const documentSet = document.createElement('div');
+                documentSet.className = 'document-set';
+                documentSet.style.display = 'inline-block';
+                documentSet.style.textAlign = 'center';
+                documentSet.style.marginRight = '30px';  // Add gap between sets
+
                 const downloadLink = document.createElement('a');
                 downloadLink.href = downloadUrl;
                 downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
-                downloadLink.textContent = `Download ${fileNameWithoutExtension}_${language}.docx`;
+                downloadLink.textContent = `${fileNameWithoutExtension}_${language}.docx`;
 
                 const icon = document.createElement('img');
                 icon.src = 'https://cdn-icons-png.flaticon.com/128/716/716935.png';
@@ -438,8 +467,17 @@ async function startTranslation() {
                 icon.style.marginRight = '5px';
 
                 downloadLink.prepend(icon);
-                translatedDocuments.appendChild(downloadLink);
-                translatedDocuments.appendChild(document.createElement('br'));
+
+                const translationTime = document.createElement('p');
+                translationTime.className = 'translation-time';
+                translationTime.textContent = `Time taken: ${formatTime(Date.now() - startTime)}`;
+
+                // Append link and time to the set
+                documentSet.appendChild(downloadLink);
+                documentSet.appendChild(translationTime);
+
+                // Add the set to the container
+                documentLinksContainer.appendChild(documentSet);
 
                 // Once the API is fetched, complete the progress bar
                 completeProgress();
@@ -451,29 +489,29 @@ async function startTranslation() {
             alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
         }
     }
-    const endTime = Date.now();
-    const translationTimeMs = endTime - startTime;
-    const formattedTranslationTime = formatTime(translationTimeMs);
-
-    // Create a div to show the word count and time taken
-    const translationDetails = document.createElement('div');
-    translationDetails.className = 'translation-details';
-    translationDetails.innerHTML = `
-        <p>Time taken: ${formattedTranslationTime}</p>
-    `;
-    translatedDocuments.appendChild(translationDetails);
 
     // Now, progress to 100% as the documents are ready
-    // completeProgress();
+    completeProgress();
 
     translatedDocuments.style.display = 'block';
     translatedDocuments.style.padding = '40px';
+    translatedDocuments.style.width = '90%';
     translatedDocuments.style.borderRadius = '8px';
     translatedDocuments.style.backgroundColor = '#fff';
     translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
-    translatedDocuments.style.marginLeft = '20rem';
-    translatedDocuments.style.marginTop = '5rem';
+    translatedDocuments.style.marginLeft = '3.5rem';
+    translatedDocuments.style.marginTop = '1rem';
+
+    // Add hover effects for the container
+    translatedDocuments.addEventListener('mouseover', function() {
+        translatedDocuments.style.backgroundColor = '#f7f7f7';
+    });
+
+    translatedDocuments.addEventListener('mouseout', function() {
+        translatedDocuments.style.backgroundColor = '#fff';
+    });
 }
+
  
 function formatTime(ms) {
     const minutes = Math.floor(ms / 60000);

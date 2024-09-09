@@ -33,6 +33,8 @@
             padding: 20px;
             width: 23%;
             text-align: center;
+            margin-top: 3rem;
+            margin-left: -5rem;
         }
 
         .metric-box:hover {
@@ -58,6 +60,7 @@
             width: 48%;
             text-align: center;
             max-width: 500px;
+            height: 350px;
         }
 
         .chart-container h3 {
@@ -91,7 +94,7 @@
                         <img src="wipro.png" alt="Logo" width="220px" height="70px" style="margin-right: -2rem;">
                 </div>
                 <div class="navbar-center">
-                    WiLexi
+                    <a href="home.html" style="text-decoration: none; color: white;"> WiLexi </a>
                 </div>
             </div>
         </nav>
@@ -263,10 +266,25 @@
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'bottom'
-                    }
+                        position: 'right',
+                        labels: {
+                    boxWidth: 15,   // Controls the size of the box next to each label
                 }
+                    }
+                },
+                layout: {
+            padding: {
+                left: 0,
+                right: 50,  // Adjusts space between chart and legend
+                top: 0,
+                bottom: 0
             }
+        },
+        responsive: true,
+        maintainAspectRatio: false,  // Allows for flexible sizing
+        radius: '80%'  // Controls the overall radius of the doughnut
+
+    }
         });
 
         // Most Translated Languages
