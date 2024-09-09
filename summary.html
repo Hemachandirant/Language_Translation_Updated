@@ -202,7 +202,7 @@
 </div>
  
     <footer class="bg-dark text-black text-center py-2">
-        <p>&copy; 2024 - Wipro | <a href="privacy.html" class="text-black">Privacy Policy</a></p>
+        <p style="margin: 0;">&copy; 2024 - Wipro | <a href="privacy.html" class="text-black">Privacy Policy</a></p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -230,7 +230,31 @@ function getSelectedLanguages() {
     });
     return selectedLanguages;
 }
+// Function to update the dropdown label with the selected format
+function updateSelectedFormat() {
+    // Define a mapping between file extensions and format names
+    const formatNames = {
+        pdf: 'PDF',
+        docx: 'Word',
+        txt: 'Text'
+    };
  
+    // Get all the radio inputs for the format group
+    const formatOptions = document.querySelectorAll('input[name="format-group"]');
+ 
+    // Loop through the options and check which one is selected
+    formatOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            // Find the label of the dropdown and update it with the selected format name
+            const dropdownLabel = document.querySelector('.dropdown-format-label');
+            const selectedFormat = formatNames[this.value]; // Use the format name instead of the file extension
+            dropdownLabel.textContent = 'Selected Format: ' + selectedFormat; // Update the label with the format name
+        });
+    });
+}
+ 
+// Call the function to initialize the event listeners
+updateSelectedFormat();
 // Function to update the display of selected languages
 function updateSelectedLanguagesDisplay() {
     var selectedLanguages = getSelectedLanguages();
