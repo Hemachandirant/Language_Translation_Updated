@@ -467,14 +467,14 @@ translatedDocuments.addEventListener('mouseout', function() {
  
 // Create a container for the document links to ensure they are displayed in a row
 const documentsContainer = document.createElement('div');
-documentsContainer.style.display = 'flex'; // Flex to keep items in a row
+// documentsContainer.style.display = 'flex'; // Flex to keep items in a row
 documentsContainer.style.flexDirection = 'row'; // Horizontal row format for documents
 documentsContainer.style.whiteSpace = 'nowrap'; // Prevent links from wrapping
 documentsContainer.style.paddingLeft = '0'; // Remove any unnecessary left padding
 translatedDocuments.style.maxHeight = '150px'; // Set a fixed height to prevent vertical scrolling
 translatedDocuments.style.overflowX = 'auto'; // Enable horizontal scrolling
-translatedDocuments.style.paddingRight = '20px';
-documentsContainer.style.gap = '20px';
+// translatedDocuments.style.paddingRight = '20px';
+// documentsContainer.style.gap = '20px';
 translatedDocuments.appendChild(documentsContainer);
  
     for (const language of selectedLanguages) {

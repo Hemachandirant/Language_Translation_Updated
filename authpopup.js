@@ -1,4 +1,3 @@
- 
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
  
 let username = "";
