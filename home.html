@@ -12,7 +12,9 @@
     <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
     <!-- <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet"> -->
- 
+    <script defer src="authConfig.js"></script>
+    <script defer src="authPopup.js"></script>
+    <script src="https://alcdn.msauth.net/browser/2.19.0/js/msal-browser.min.js"></script>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -308,7 +310,7 @@
               <a class="nav-link" href="#">Demo</a>
             </li>
             <li class="signout-container">
-              <button class="signout-button" onClick="signOut()" href="#">
+              <button class="signout-button" onClick="signOut()" href="https://documenttranslation12.azurewebsites.net/login.html">
                 Signout
               </button>
             </li>
