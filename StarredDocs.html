@@ -184,16 +184,22 @@
         uploadedDateCell.textContent = doc.uploadedDate;
         row.appendChild(uploadedDateCell);
  
-        // Action
-        const actionCell = document.createElement('td');
-        const downloadBtn = document.createElement('button');
-        downloadBtn.className = "btn btn-primary";
-        downloadBtn.textContent = "Download";
-        downloadBtn.onclick = function () {
-            window.open(docLink.href, '_blank');
-        };
-        actionCell.appendChild(downloadBtn);
-        row.appendChild(actionCell);
+       // Action
+const actionCell = document.createElement('td');
+const downloadBtn = document.createElement('button');
+downloadBtn.className = "btn btn-primary";
+downloadBtn.textContent = "Download";
+downloadBtn.onclick = function () {
+    // Ensure the download button uses the same link as the anchor element for downloading
+    if (doc.transID) {
+        const docLink = `http://127.0.0.1:8006/download/translated/${doc.transID}`;
+        window.open(docLink, '_blank');
+    } else {
+        alert("No Translations Available");
+    }
+};
+actionCell.appendChild(downloadBtn);
+row.appendChild(actionCell);
  
         // Append the row to the table body
         tbody.appendChild(row);
