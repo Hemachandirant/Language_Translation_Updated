@@ -206,15 +206,15 @@
         function updateSelectedLanguagesDisplay() {
             var selectedLanguages = getSelectedLanguages();
             var displayElement = document.getElementById('selectedLanguages');
-            
+           
             if (selectedLanguages.length > 0) {
                 displayElement.textContent = 'Selected Languages: ' + selectedLanguages.join(', ');
             } else {
                 displayElement.textContent = 'Selected Languages: None';
             }
         }
-
-
+ 
+ 
        
         // Event listener to toggle the dropdown menu for language selection
         document.querySelector('.Target_language').addEventListener('click', function(event) {
@@ -237,7 +237,7 @@
                     await detectLanguage(file);
             const fileNameElement = document.getElementById('file-name');
             const fileURL = URL.createObjectURL(file);
-
+ 
             fileNameElement.textContent = file.name;
             fileNameElement.href = fileURL;
             fileNameElement.download = file.name; // Set the download attribute
@@ -277,34 +277,34 @@
        
         let progress = 0; // Initialize progress variable
 let progressInterval; // To store the interval reference
-
+ 
 function startProgress() {
     const progressBar = $('#translationProgressBar');
     const progressBarInner = progressBar.find('.progress-bar');
     const translateLabel = $('#translateLabel');
     const checkImg = $('#checkImg');
-
+ 
     progressBar.show();
     translateLabel.show();
     checkImg.hide();
-
+ 
     translateLabel.css({
         'color': '#666666',
         'margin-left': '10rem',
         'text-align': 'center',
         'margin-right': 'auto'
     });
-
+ 
     console.log('Progress started...');
-
+ 
     const maxFastProgress = 30; // Fast progress until 70%
     const fastIntervalTime = 1000; // Fast update every 100 milliseconds
     const slowIntervalTime = 200; // Slow update every 200 milliseconds
     const fastProgressIncrement = 10; // Fast increment up to 70%
     const slowProgressIncrement = 0.5; // Slow increment after 70%
-
+ 
     progress = 0; // Reset progress
-
+ 
     // Start fast progress until 70%
     progressInterval = setInterval(() => {
         if (progress < maxFastProgress) {
@@ -312,7 +312,7 @@ function startProgress() {
             progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
         } else {
             clearInterval(progressInterval); // Stop the fast interval
-
+ 
             // Start slow progress after reaching 70%
             progressInterval = setInterval(() => {
                 if (progress < 90) {
@@ -323,29 +323,29 @@ function startProgress() {
         }
     }, fastIntervalTime);
 }
-
+ 
 function completeProgress() {
     clearInterval(progressInterval); // Stop the slow progress
-
+ 
     const progressBarInner = $('#translationProgressBar').find('.progress-bar');
-
+ 
     // Fast completion to 100%
     progressInterval = setInterval(() => {
         progress += 5; // Faster increment to finish to 100%
         progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
-
+ 
         if (progress >= 100) {
             clearInterval(progressInterval);
             $('#translationProgressBar').hide();  // Hide progress bar after completion
             $('#checkImg').show();  // Show the checkmark image
-            
+           
             // Show "Translated!" message
             $('#translateLabel').html('<strong>Translated!</strong>');
             $('#translateLabel').css('color', '#28a745'); // Optional: Change color to green
         }
     }, 100); // Faster interval for quick completion
 }
-
+ 
 async function startTranslation() {
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
@@ -363,7 +363,7 @@ async function startTranslation() {
             method: 'POST',
             body: formDataFordocument,
         });
-
+ 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         } else {
@@ -384,103 +384,128 @@ async function startTranslation() {
         alert("Please select at least one target language.");
         return;
     }
-
+ 
     document.getElementById("translateLabel").style.display = 'inline';
     startProgress();
-
+ 
     const translatedDocuments = document.getElementById('translatedDocuments');
     translatedDocuments.innerHTML = ''; // Clear previous download links
-
+ 
     const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
     const isSingleDocument = selectedLanguages.length === 1;
     const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
     const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
-
+ 
     // Create a container for the title and ready message, outside the translated documents section
     const translationHeaderContainer = document.createElement('div');
     translationHeaderContainer.className = 'translation-header-container';
     translationHeaderContainer.style.textAlign = 'center';  // Center the title and message
     translationHeaderContainer.style.marginBottom = '20px'; // Add spacing between the header and the document links
-
+ 
     const title = document.createElement('h3');
     title.className = 'translated-title';
     title.textContent = translatedText;
     title.style.marginTop = '3rem'; // Margin for spacing above the title
-
-
+ 
+ 
     const readyMessage = document.createElement('div');
     readyMessage.className = 'ready-msg';
     readyMessage.textContent = readyMessageText;
     readyMessage.style.marginTop = '0.01rem';
-
+ 
     translationHeaderContainer.appendChild(title);
     translationHeaderContainer.appendChild(readyMessage);
-
+ 
     // Insert the header container above the translated documents container
     translatedDocuments.parentNode.insertBefore(translationHeaderContainer, translatedDocuments);
-
+ 
     const documentLinksContainer = document.createElement('div');
     documentLinksContainer.className = 'document-links-container';
     documentLinksContainer.style.display = 'flex';
     documentLinksContainer.style.overflowX = 'auto';  // Enable horizontal scroll
     documentLinksContainer.style.whiteSpace = 'nowrap';  // Prevent line breaks
     documentLinksContainer.style.marginTop = '20px';  // Add some spacing
-
+ 
     translatedDocuments.innerHTML = '';  // Clear previous content
-
+ 
     translatedDocuments.appendChild(documentLinksContainer);
-
+ 
     const startTime = Date.now();
     for (const language of selectedLanguages) {
         const formData = new FormData();
         formData.append("file", file);
         const targetLangCode = language;
         formData.append("target_lang", targetLangCode);
-
+ 
         try {
             const response = await fetch('http://127.0.0.1:8005/translate-document/', {
                 method: 'POST',
                 body: formData,
             });
-
+ 
             if (response.ok) {
                 const blob = await response.blob();
+ 
+                const formDataForTranslatedDocument = new FormData();
+                formDataForTranslatedDocument.append("file", blob, `${fileNameWithoutExtension}_${language}.docx`);
+                formDataForTranslatedDocument.append("language", language);
+                console.log(originalDocumentId);
+                formDataForTranslatedDocument.append("doc_id", originalDocumentId);
+ 
+               
+                try {
+                    const storeResponse = await fetch('http://127.0.0.1:8006/upload-translated-document/', {
+                        method: 'POST',
+                        body: formDataForTranslatedDocument,
+                    });
+ 
+                    if (!storeResponse.ok) {
+                        throw new Error(`HTTP error! Status: ${storeResponse.status}`);
+                    }
+ 
+                    console.log("Uploaded translated document to the database.");
+ 
+ 
                 const downloadUrl = window.URL.createObjectURL(blob);
-
+ 
                 // Create the document link and its corresponding time
                 const documentSet = document.createElement('div');
                 documentSet.className = 'document-set';
                 documentSet.style.display = 'inline-block';
                 documentSet.style.textAlign = 'center';
                 documentSet.style.marginRight = '30px';  // Add gap between sets
-
+ 
                 const downloadLink = document.createElement('a');
                 downloadLink.href = downloadUrl;
                 downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
                 downloadLink.textContent = `${fileNameWithoutExtension}_${language}.docx`;
-
+ 
                 const icon = document.createElement('img');
                 icon.src = 'https://cdn-icons-png.flaticon.com/128/716/716935.png';
                 icon.alt = 'Word Icon';
                 icon.style.width = '42px';
                 icon.style.height = '42px';
                 icon.style.marginRight = '5px';
-
+ 
                 downloadLink.prepend(icon);
-
+ 
                 const translationTime = document.createElement('p');
                 translationTime.className = 'translation-time';
                 translationTime.textContent = `Time taken: ${formatTime(Date.now() - startTime)}`;
-
+ 
                 // Append link and time to the set
                 documentSet.appendChild(downloadLink);
                 documentSet.appendChild(translationTime);
-
+ 
                 // Add the set to the container
                 documentLinksContainer.appendChild(documentSet);
-
+ 
                 // Once the API is fetched, complete the progress bar
                 completeProgress();
+            } catch (error) {
+                    console.error('Error during the storing process:', error);
+                    alert('There was an error during the DB storing process. Please try again.');
+                }
             } else {
                 alert(`Failed to process the file for language: ${language}. Please try again.`);
             }
@@ -489,10 +514,10 @@ async function startTranslation() {
             alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
         }
     }
-
+ 
     // Now, progress to 100% as the documents are ready
     completeProgress();
-
+ 
     translatedDocuments.style.display = 'block';
     translatedDocuments.style.padding = '40px';
     translatedDocuments.style.width = '90%';
@@ -501,17 +526,17 @@ async function startTranslation() {
     translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
     translatedDocuments.style.marginLeft = '3.5rem';
     translatedDocuments.style.marginTop = '1rem';
-
+ 
     // Add hover effects for the container
     translatedDocuments.addEventListener('mouseover', function() {
         translatedDocuments.style.backgroundColor = '#f7f7f7';
     });
-
+ 
     translatedDocuments.addEventListener('mouseout', function() {
         translatedDocuments.style.backgroundColor = '#fff';
     });
 }
-
+ 
  
 function formatTime(ms) {
     const minutes = Math.floor(ms / 60000);
