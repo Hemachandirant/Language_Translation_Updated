@@ -311,7 +311,7 @@ async function detectLanguage(file) {
     formData.append('file', file);
  
     try {
-        const response = await fetch('http://127.0.0.1:8009/detect-language/', {
+        const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/detect-language/', {
             method: 'POST',
             body: formData,
         });
@@ -493,7 +493,7 @@ translatedDocuments.appendChild(documentsContainer);
         formData.append("output_format", documentFormat); // Correct key for output format
  
         try {
-            const response = await fetch('http://127.0.0.1:8000/upload-summarize-translate/', {
+            const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/upload-summarize-translate/', {
                 method: 'POST',
                 body: formData,
             });

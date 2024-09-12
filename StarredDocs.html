@@ -150,7 +150,7 @@
         // Document Name
         const docNameCell = document.createElement('td');
         const docLink = document.createElement('a');
-        docLink.href = `http://127.0.0.1:8009/download/original/${doc.docID}`;
+        docLink.href = `https://amoeba-endless-socially.ngrok-free.app/download/original/${doc.docID}`;
         docLink.target = "_blank";
         docLink.textContent = doc.name;
         docNameCell.appendChild(docLink);
@@ -160,7 +160,7 @@
         const translatedCell = document.createElement('td');
         if (doc.translated) {
             const link = document.createElement('a');
-            link.href = `http://127.0.0.1:8009/download/translated/${doc.transID}`;
+            link.href = `https://amoeba-endless-socially.ngrok-free.app/download/translated/${doc.transID}`;
             link.target = "_blank";
             link.textContent = doc.translated;
             translatedCell.appendChild(link);
@@ -192,7 +192,7 @@ downloadBtn.textContent = "Download";
 downloadBtn.onclick = function () {
     // Ensure the download button uses the same link as the anchor element for downloading
     if (doc.transID) {
-        const docLink = `http://127.0.0.1:8009/download/translated/${doc.transID}`;
+        const docLink = `https://amoeba-endless-socially.ngrok-free.app/download/translated/${doc.transID}`;
         window.open(docLink, '_blank');
     } else {
         alert("No Translations Available");
@@ -210,7 +210,7 @@ row.appendChild(actionCell);
     // Function to fetch starred documents from the backend
 async function fetchStarredDocuments() {
     try {
-        const response = await fetch('http://127.0.0.1:8009/stareddocuments/', {
+        const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/stareddocuments/', {
             headers: new Headers({
                 "ngrok-skip-browser-warning": "69420",
             }),
