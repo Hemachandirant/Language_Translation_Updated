@@ -123,6 +123,7 @@
                                             <label><input type="checkbox" name="languages" value="German"> German</label>
                                             <label><input type="checkbox" name="languages" value="French"> French</label>
                                             <label><input type="checkbox" name="languages" value="Dutch"> Dutch</label>
+                                            <label><input type="checkbox" name="languages" value="English"> English</label>
                                             <label><input type="checkbox" name="languages" value="Chinese"> Chinese</label>
                                             <label><input type="checkbox" name="languages" value="Spanish"> Spanish</label>
                                             <label><input type="checkbox" name="languages" value="Arabic"> Arabic</label>
@@ -310,7 +311,7 @@ async function detectLanguage(file) {
     formData.append('file', file);
  
     try {
-        const response = await fetch('http://127.0.0.1:8000/detect-language/', {
+        const response = await fetch('http://127.0.0.1:8009/detect-language/', {
             method: 'POST',
             body: formData,
         });
@@ -492,7 +493,7 @@ translatedDocuments.appendChild(documentsContainer);
         formData.append("output_format", documentFormat); // Correct key for output format
  
         try {
-            const response = await fetch('http://127.0.0.1:8001/upload-summarize-translate/', {
+            const response = await fetch('http://127.0.0.1:8000/upload-summarize-translate/', {
                 method: 'POST',
                 body: formData,
             });
