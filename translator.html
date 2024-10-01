@@ -140,12 +140,12 @@
                            
                         </div>
                
-                         <!-- Second Row: Start Translating Button -->
-                         <div class="row mt-3">
+                        <div class="row mt-3">
                             <div class="col-md-12 text-center">
                                 <button type="button" id="startTranslateBtn" class="submitbutton" style="margin-top: -3rem;" onclick="startTranslation()">Start Translating</button>
                             </div>
                         </div>
+                        
                
                         <!-- Third Row: Progress Bar -->
                         <div class="row mt-3">
@@ -351,6 +351,7 @@ function completeProgress() {
 }
  
 async function startTranslation() {
+    document.getElementById("startTranslateBtn").style.visibility = "hidden";
     const fileInput = document.getElementById('documentUpload');
     const file = fileInput.files[0];
     const selectedLanguages = getSelectedLanguages();
