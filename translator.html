@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="styleDT.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+    <script defer src="authConfig.js"></script>
+    <script defer src="authPopup.js"></script>
+    <script src="https://alcdn.msauth.net/browser/2.19.0/js/msal-browser.min.js"></script>
+    <script>
+      if (!localStorage.getItem("authToken")) {
+          // Redirect to login page if user is not authenticated
+          window.location.href = "login.html";
+      }
+  </script>
  
 </head>
  

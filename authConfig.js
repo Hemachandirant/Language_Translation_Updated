@@ -7,10 +7,11 @@ const msalConfig = {
  "https://login.microsoftonline.com/f5791d91-daca-4d28-8700-680f7a2f8b6a",
        // Full redirect URL, in form of http://localhost:3000
        redirectUri: "https://documenttranslation12.azurewebsites.net/home.html",
+    // redirectUri:"http://localhost:5500/home.html"
    },
     cache: {
-        cacheLocation: "sessionStorage",
-        storeAuthStateInCookie: false,
+        cacheLocation: "localStorage",
+        storeAuthStateInCookie: true,
     },
     system: {
         loggerOptions: {

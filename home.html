@@ -15,6 +15,13 @@
     <script defer src="authConfig.js"></script>
     <script defer src="authPopup.js"></script>
     <script src="https://alcdn.msauth.net/browser/2.19.0/js/msal-browser.min.js"></script>
+    <script>
+      if (!localStorage.getItem("authToken")) {
+          // Redirect to login page if user is not authenticated
+          window.location.href = "login.html";
+      }
+  </script>
+  
     <style>
       body {
         font-family: Arial, sans-serif;
