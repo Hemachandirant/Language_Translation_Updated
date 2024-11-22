@@ -18,7 +18,6 @@
           window.location.href = "login.html";
       }
   </script>
- 
 </head>
  
 <body>
@@ -88,7 +87,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <!-- <div class="card-body"> -->
-                        <!-- <h5 class="card-title">Upload Document</h5> -->
+                        <h5 class="card-title">1. Upload Document and Get Summarized</h5>
                         <div class="upload-drop-zone" id="drop-zone" style="height: 380px; width: 700px;">
                             <p>Drag files here</p>
                             <label for="documentUpload" class="file-input-label">
@@ -116,8 +115,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <h5 class="card-title">2. Select Target  Language and Get Translated</h5>
                     <div class="box" style="height: 380px; width: 700px;">
                         <form>
+                            
                             <!-- First Row: Source and Target Language -->
                             <div class="row mb-4">
                                 <div class="col-md-6" style="padding-left: 50px;">
@@ -187,8 +188,8 @@
                             <!-- <div class="row justify-content-center"> -->
                                 <div class="col-md-6">
                                     <div id="translateProgressWrapper"  style="margin-top: -0.5rem; width: 27rem;margin-left: 6rem;">
-                                        <div class="estimated-time" style="display: none; margin-top: 10px; font-size: 1px; color: #ffffff; text-align: center;">
-                                            Estimated time remaining: <span id="estimatedTime"></span>
+                                        <div class="estimated-time" style=" margin-top: 10px; font-size: 1px;  text-align: center;">
+                                            <h6>Estimated time remaining:</h6> <span id="estimatedTime"></span>
                                         </div>
                                         <span id="translateLabel" style="display: none"><strong>Translating...</strong></span>
                                         <img id="checkImg" src="translatedcheck.png" alt="Checkmark" style="display: none; width: 20px; height: 20px; margin-left: 10px;" />
@@ -250,7 +251,7 @@ function getSelectedLanguages() {
         selectedLanguagesDiv.textContent = 'Selected Languages: None';
     }
 }
-
+ 
 // Function to update the dropdown label with the selected format
 function updateSelectedFormat() {
     // Define a mapping between file extensions and format names
@@ -432,11 +433,11 @@ async function startTranslation() {
     const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.'); // Remove the file extension
 const translatedDocuments = document.getElementById('translatedDocuments');
 translatedDocuments.innerHTML = ''; // Clear previous download links
-
+ 
 const isSingleDocument = selectedLanguages.length === 1;
 const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
 const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
-
+ 
 // Create a container to hold the title and the ready message
 const titleContainer = document.createElement('div');
 titleContainer.style.display = 'flex';
@@ -444,14 +445,14 @@ titleContainer.style.flexDirection = 'column'; // Arrange title and message vert
 titleContainer.style.alignItems = 'center';
 titleContainer.style.justifyContent = 'center';
 titleContainer.style.marginTop = '3rem'; // Margin for spacing above the title
-
+ 
 // Create the title element
 const title = document.createElement('h3');
 title.className = 'translated-title';
 title.textContent = translatedText;
 title.style.textAlign = 'center'; // Center the title
 titleContainer.appendChild(title); // Add the title to the container
-
+ 
 // Create the ready message element
 const readyMessage = document.createElement('span');
 readyMessage.className = 'ready-msg';
@@ -459,10 +460,10 @@ readyMessage.textContent = readyMessageText;
 readyMessage.style.textAlign = 'center'; // Center the message text
 readyMessage.style.marginTop = '0.01rem';
 titleContainer.appendChild(readyMessage); // Add the message below the title
-
+ 
 // Insert the titleContainer before the translatedDocuments div
 translatedDocuments.parentNode.insertBefore(titleContainer, translatedDocuments);
-
+ 
 // Apply styles to the translatedDocuments container
 translatedDocuments.style.display = 'flex';
 translatedDocuments.style.flexDirection = 'row'; // Row to ensure documents are in a single line
@@ -477,23 +478,23 @@ translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
 translatedDocuments.style.marginLeft = '3rem';
 translatedDocuments.style.marginTop = '1rem';
 translatedDocuments.style.whiteSpace = 'nowrap'; // Prevent folding or wrapping of the links
-
+ 
 // Add hover effects for the container
 translatedDocuments.addEventListener('mouseover', function() {
     translatedDocuments.style.backgroundColor = '#f7f7f7';
 });
-
+ 
 translatedDocuments.addEventListener('mouseout', function() {
     translatedDocuments.style.backgroundColor = '#fff';
 });
-
+ 
 // Create a container for the document links to ensure they are displayed in a row
 const documentsContainer = document.createElement('div');
 documentsContainer.style.display = 'inline-block'; // Keep items in a single line
 documentsContainer.style.whiteSpace = 'nowrap'; // Prevent wrapping
 translatedDocuments.appendChild(documentsContainer);
-
-
+ 
+ 
  
     for (const language of selectedLanguages) {
         const formData = new FormData();
@@ -542,7 +543,7 @@ translatedDocuments.appendChild(documentsContainer);
     // Complete the progress bar when all translations are done
     completeProgress();
  
-    // estimatedTimeContainer.style.display = 'none';
+    estimatedTimeContainer.style.display = 'none';
    
     // Calculate the translation time
     const endTime = Date.now();
@@ -557,7 +558,7 @@ translatedDocuments.appendChild(documentsContainer);
  
     // Hide the estimated time container once the files are ready
     clearInterval(intervalId);
-    document.querySelector(".translationProgressBar").style.display = 'none'; // Hide the progress bar
+    // document.querySelector(".translationProgressBar").style.display = 'none'; // Hide the progress bar
     document.querySelector(".tick-img").style.display = 'block'; // Show the tick image
 }
  
@@ -632,3 +633,6 @@ function formatTime(ms) {
 </body>
  
 </html>
+ 
+summary
+ 
