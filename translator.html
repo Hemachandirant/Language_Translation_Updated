@@ -18,7 +18,6 @@
           window.location.href = "login.html";
       }
   </script>
- 
 </head>
  
 <body>
@@ -26,14 +25,14 @@
         <nav class="navbar">
             <div class="container-fluid">
                 <div class="col-md-12 text-right">
-                        <img src="wipro.png" alt="Logo" width="220px" height="70px" style="margin-right: -2rem;">
+                    <img src="wipro.png" alt="Logo" width="220px" height="70px" style="margin-right: -2rem;">
                 </div>
                 <div class="navbar-center">
-                   <a href="home.html" style="text-decoration: none; color: white;"> WiLexi </a>
+                    <a href="home.html" style="text-decoration: none; color: white;"> WiLexi </a>
                 </div>
             </div>
         </nav>
-</header>
+    </header>
  
     <!-- <header class="bg-dark text-black py-2">
         <div class="container-fluid">
@@ -81,107 +80,134 @@
         </div>
         <!-- /#sidebar-wrapper -->
  
-       <!-- Page Content -->
-       <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <div class="row mt-4 justify-content-center">
-                <div class="col-md-6">
-                    <div class="card">
-                        <!-- <div class="card-body"> -->
-                        <!-- <h5 class="card-title">Upload Document</h5> -->
-                        <div class="upload-drop-zone" id="drop-zone" style="height: 280px; margin-left: 0rem; width: 700px;">
-                            <p>Drag files here</p>
-                            <label for="documentUpload" class="file-input-label">
-                                <img src="upload.png" alt="Click to upload" class="img-fluid">
-                            </label>
-                            <p class="click-text">Click to upload</p>
-                            <p> .docx</p>
-                            <p class="text-muted">Supports files up to 300MB in size</p>
-                            <input type="file" class="form-control-file hidden-file-input" id="documentUpload" accept=".pdf,.doc,.docx,.txt,.ppt,.pptx">
-                            <p id="file-info-wrapper" class="file-name" style="display: none;">
-                                Uploaded File: <a href="#" id="file-name"></a>
-                            </p>
-                            <p id="fileNameDisplay" class="mt-2"></p>
-                           
-                           
-                           
-                        </div>
- 
-                        <!-- </div> -->
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="box" style="height: 280px; margin-right: 7%; width: 700px;">
-                        <div class="row align-items-center">
-                            <!-- First Row: Source and Target Language -->
-                            <div class="col-md-6" style="margin-top: -3rem; position: relative; padding-left: 50px;">
-                                <label for="sourceLanguage">Detected source language</label><br>
-                                <input type="text" class="Source_language" placeholder="Detected language" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="dropdown" style="margin-top: -0.4rem; margin-left: 3rem;">
-                                    <label for="targetLanguage" style="font-size: 16px;">Target language</label>
-                                    <button class="Target_language" type="button">Select Languages</button>
-                                    <div class="dropdown-content" style="display:none;">
-                                        <label><input type="checkbox" name="languages" value="German"> German</label>
-                                        <label><input type="checkbox" name="languages" value="French"> French</label>
-                                        <label><input type="checkbox" name="languages" value="Dutch"> Dutch</label>
-                                        <label><input type="checkbox" name="languages" value="Chinese"> Chinese</label>
-                                        <label><input type="checkbox" name="languages" value="Spanish"> Spanish</label>
-                                        <label><input type="checkbox" name="languages" value="Arabic"> Arabic</label>
-                                        <label><input type="checkbox" name="languages" value="Hindi"> Hindi</label>
-                                        <label><input type="checkbox" name="languages" value="Portuguese"> Portuguese</label>
-                                        <label><input type="checkbox" name="languages" value="Russian"> Russian</label>
-                                        <label><input type="checkbox" name="languages" value="Japanese"> Japanese</label>
-                                        <label><input type="checkbox" name="languages" value="Korean"> Korean</label>
-                                        <label><input type="checkbox" name="languages" value="Italian"> Italian</label>
-                                        <label><input type="checkbox" name="languages" value="Turkish"> Turkish</label>
-                                        <label><input type="checkbox" name="languages" value="Urdu"> Urdu</label>
-                                        <label><input type="checkbox" name="languages" value="Persian"> Persian</label>
-                                        <label><input type="checkbox" name="languages" value="Swahili"> Swahili</label>
-                                    </div>
-                                </div>
-                                <div id="selectedLanguagesWrapper" style="margin-left: 3rem; width: 70%; overflow-x: auto; white-space: nowrap;  padding: 10px;">
-                                    <p id="selectedLanguages" style="display: inline;">Selected Languages: None</p>
-                                </div>
-                            </div>
-                            
-                           
-                        </div>
-               
-                        <div class="row mt-3">
-                            <div class="col-md-12 text-center">
-                                <button type="button" id="startTranslateBtn" class="submitbutton" style="margin-top: -3rem;" onclick="startTranslation()">Start Translating</button>
-                            </div>
-                        </div>
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-md-6">
                         
-               
-                        <!-- Third Row: Progress Bar -->
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                <div id="translateProgressWrapper" style="margin-top: 0.5rem; margin-left: 7rem;">
-                                    <span id="translateLabel" style="display: none"><strong>Translating...</strong></span>
-                                    <img id="checkImg" src="translatedcheck.png" alt="Checkmark" style="display: none; width: 20px; height: 20px; margin-left: 10px;" />
-                                    <div id="translationProgressBar" class="progress" style="display: none;">
-                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            
+                                <h5 class="card-title">1. Upload Document</h5>
+                                <div class="upload-drop-zone" id="drop-zone"
+                                    style="height: 280px; margin-left: 0rem; width: 700px;">
+                                    <p>Drag files here</p>
+                                    <label for="documentUpload" class="file-input-label">
+                                        <img src="upload.png" alt="Click to upload" class="img-fluid">
+                                    </label>
+                                    <p class="click-text">Click to upload</p>
+                                    <p> .docx</p>
+                                    <p class="text-muted">Supports files up to 300MB in size</p>
+                                    <input type="file" class="form-control-file hidden-file-input" id="documentUpload"
+                                        accept=".pdf,.doc,.docx,.txt,.ppt,.pptx">
+                                    <p id="file-info-wrapper" class="file-name" style="display: none;">
+                                        Uploaded File: <a href="#" id="file-name"></a>
+                                    </p>
+                                    <p id="fileNameDisplay" class="mt-2"></p>
+ 
+ 
+ 
+                                </div>
+ 
+                           
+                       
+                    </div>
+                    <div class="col-md-6">
+                        
+                            <h5 class="card-title">2. Select Target Language and Get Translated</h5>
+                            <div class="box" style="height: 280px; margin-right: 7%; width: 700px;">
+                            
+                                <div class="row align-items-center">
+                                    <!-- First Row: Source and Target Language -->
+                                    <div class="col-md-6"
+                                        style="margin-top: -3rem; position: relative; padding-left: 50px;">
+                                        <label for="sourceLanguage">Detected source language</label><br>
+                                        <input type="text" class="Source_language" placeholder="Detected language" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="dropdown" style="margin-top: -0.4rem; margin-left: 3rem;">
+                                            <label for="targetLanguage" style="font-size: 16px;">Target language</label>
+                                            <button class="Target_language" type="button">Select Languages</button>
+                                            <div class="dropdown-content" style="display:none;">
+                                                <label><input type="checkbox" name="languages" value="German">
+                                                    German</label>
+                                                <label><input type="checkbox" name="languages" value="French">
+                                                    French</label>
+                                                <label><input type="checkbox" name="languages" value="Dutch"> Dutch</label>
+                                                <label><input type="checkbox" name="languages" value="Chinese">
+                                                    Chinese</label>
+                                                <label><input type="checkbox" name="languages" value="Spanish">
+                                                    Spanish</label>
+                                                <label><input type="checkbox" name="languages" value="Arabic">
+                                                    Arabic</label>
+                                                <label><input type="checkbox" name="languages" value="Hindi"> Hindi</label>
+                                                <label><input type="checkbox" name="languages" value="Portuguese">
+                                                    Portuguese</label>
+                                                <label><input type="checkbox" name="languages" value="Russian">
+                                                    Russian</label>
+                                                <label><input type="checkbox" name="languages" value="Japanese">
+                                                    Japanese</label>
+                                                <label><input type="checkbox" name="languages" value="Korean">
+                                                    Korean</label>
+                                                <label><input type="checkbox" name="languages" value="Italian">
+                                                    Italian</label>
+                                                <label><input type="checkbox" name="languages" value="Turkish">
+                                                    Turkish</label>
+                                                <label><input type="checkbox" name="languages" value="Urdu"> Urdu</label>
+                                                <label><input type="checkbox" name="languages" value="Persian">
+                                                    Persian</label>
+                                                <label><input type="checkbox" name="languages" value="Swahili">
+                                                    Swahili</label>
+                                            </div>
+                                        </div>
+                                        <div id="selectedLanguagesWrapper"
+                                            style="margin-left: 3rem; width: 70%; overflow-x: auto; white-space: nowrap;  padding: 10px;">
+                                            <p id="selectedLanguages" style="display: inline;">Selected Languages: None</p>
+                                        </div>
+                                    </div>
+    
+    
+                                </div>
+    
+                                <div class="row mt-3">
+                                    <div class="col-md-12 text-center">
+                                        <button type="button" id="startTranslateBtn" class="submitbutton"
+                                            style="margin-top: -3rem;" onclick="startTranslation()">Start
+                                            Translating</button>
+                                        <h6 class="mt-4">Estimated Time For Translating: 2mins</h6>
+                                    </div>
+                                </div>
+    
+    
+                                <!-- Third Row: Progress Bar -->
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <div id="translateProgressWrapper" style="margin-top: 0.5rem; margin-left: 7rem;">
+                                            <span id="translateLabel"
+                                                style="display: none"><strong>Translating...</strong></span>
+                                            <img id="checkImg" src="translatedcheck.png" alt="Checkmark"
+                                                style="display: none; width: 20px; height: 20px; margin-left: 10px;" />
+                                            <div id="translationProgressBar" class="progress" style="display: none;">
+                                                <div class="progress-bar" role="progressbar" style="width: 0%;"
+                                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        
                     </div>
+ 
                 </div>
-               
+            </div>
+ 
+            <!-- Download Section for Translated Summary -->
+            <div id="translatedDocuments" style="display:none;">
+                <a id="downloadLink" href="#" download>Download Translated Summary</a>
             </div>
         </div>
- 
-        <!-- Download Section for Translated Summary -->
-        <div id="translatedDocuments" style="display:none;">
-            <a id="downloadLink" href="#" download>Download Translated Summary</a>
-        </div>
     </div>
-</div>
  
-    <footer class="bg-dark text-black text-center py-2" >
+    <footer class="bg-dark text-black text-center py-2">
         <p style="margin:0">&copy; 2024 - Wipro | <a href="privacy.html" class="text-black">Privacy Policy</a></p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -191,31 +217,31 @@
     <script>
  
         // Event listener to hide the dropdown when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             var dropdown = document.querySelector('.dropdown-content');
             var button = document.querySelector('.Target_language');
             if (!dropdown.contains(event.target) && event.target !== button) {
                 dropdown.style.display = 'none';
             }
         });
-       
+ 
         // Function to get the selected languages from the checkboxes
         function getSelectedLanguages() {
             var checkboxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]');
             var selectedLanguages = [];
-            checkboxes.forEach(function(checkbox) {
+            checkboxes.forEach(function (checkbox) {
                 if (checkbox.checked) {
                     selectedLanguages.push(checkbox.value);
                 }
             });
             return selectedLanguages;
         }
-       
-     // Function to update the display of selected languages with horizontal scroll support
+ 
+        // Function to update the display of selected languages with horizontal scroll support
         function updateSelectedLanguagesDisplay() {
             var selectedLanguages = getSelectedLanguages();
             var displayElement = document.getElementById('selectedLanguages');
-           
+ 
             if (selectedLanguages.length > 0) {
                 displayElement.textContent = 'Selected Languages: ' + selectedLanguages.join(', ');
             } else {
@@ -224,54 +250,54 @@
         }
  
  
-       
+ 
         // Event listener to toggle the dropdown menu for language selection
-        document.querySelector('.Target_language').addEventListener('click', function(event) {
+        document.querySelector('.Target_language').addEventListener('click', function (event) {
             var dropdown = document.querySelector('.dropdown-content');
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
             updateSelectedLanguagesDisplay(); // Update the display of selected languages
         });
-       
+ 
         // Update the display when a checkbox is changed
-        document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
+        document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
                 updateSelectedLanguagesDisplay();
             });
         });
-       
+ 
         document.getElementById('documentUpload').addEventListener('change', async function () {
             const file = this.files[0];
             if (file) {
                 try {
                     await detectLanguage(file);
-            const fileNameElement = document.getElementById('file-name');
-            const fileURL = URL.createObjectURL(file);
+                    const fileNameElement = document.getElementById('file-name');
+                    const fileURL = URL.createObjectURL(file);
  
-            fileNameElement.textContent = file.name;
-            fileNameElement.href = fileURL;
-            fileNameElement.download = file.name; // Set the download attribute
-            document.getElementById('file-info-wrapper').style.display = 'block';
+                    fileNameElement.textContent = file.name;
+                    fileNameElement.href = fileURL;
+                    fileNameElement.download = file.name; // Set the download attribute
+                    document.getElementById('file-info-wrapper').style.display = 'block';
                 } catch (error) {
                     console.error('Error detecting language:', error);
                 }
             }
         });
-       
+ 
         // Upload the file and detect the language using the FastAPI endpoint
         async function detectLanguage(file) {
             const formData = new FormData();
             formData.append('file', file);
-       
+ 
             try {
                 const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/detect-language/', {
                     method: 'POST',
                     body: formData,
                     headers: {
-            'Accept': 'application/json',
-            // Add other headers if necessary
-        },
+                        'Accept': 'application/json',
+                        // Add other headers if necessary
+                    },
                 });
-       
+ 
                 if (response.ok) {
                     const data = await response.json();
                     const detectedLanguage = data.language;
@@ -284,276 +310,276 @@
                 console.error('Error detecting language:', error);
             }
         }
-       
  
-           
-       
+ 
+ 
+ 
         let progress = 0; // Initialize progress variable
-let progressInterval; // To store the interval reference
+        let progressInterval; // To store the interval reference
  
-function startProgress() {
-    const progressBar = $('#translationProgressBar');
-    const progressBarInner = progressBar.find('.progress-bar');
-    const translateLabel = $('#translateLabel');
-    const checkImg = $('#checkImg');
+        function startProgress() {
+            const progressBar = $('#translationProgressBar');
+            const progressBarInner = progressBar.find('.progress-bar');
+            const translateLabel = $('#translateLabel');
+            const checkImg = $('#checkImg');
  
-    progressBar.show();
-    translateLabel.show();
-    checkImg.hide();
+            progressBar.show();
+            translateLabel.show();
+            checkImg.hide();
  
-    translateLabel.css({
-        'color': '#666666',
-        'margin-left': '10rem',
-        'text-align': 'center',
-        'margin-right': 'auto'
-    });
- 
-    console.log('Progress started...');
- 
-    const maxFastProgress = 30; // Fast progress until 70%
-    const fastIntervalTime = 1000; // Fast update every 100 milliseconds
-    const slowIntervalTime = 200; // Slow update every 200 milliseconds
-    const fastProgressIncrement = 10; // Fast increment up to 70%
-    const slowProgressIncrement = 0.5; // Slow increment after 70%
- 
-    progress = 0; // Reset progress
- 
-    // Start fast progress until 70%
-    progressInterval = setInterval(() => {
-        if (progress < maxFastProgress) {
-            progress += fastProgressIncrement;
-            progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
-        } else {
-            clearInterval(progressInterval); // Stop the fast interval
- 
-            // Start slow progress after reaching 70%
-            progressInterval = setInterval(() => {
-                if (progress < 90) {
-                    progress += slowProgressIncrement;
-                    progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
-                }
-            }, slowIntervalTime);
-        }
-    }, fastIntervalTime);
-}
- 
-function completeProgress() {
-    clearInterval(progressInterval); // Stop the slow progress
- 
-    const progressBarInner = $('#translationProgressBar').find('.progress-bar');
- 
-    // Fast completion to 100%
-    progressInterval = setInterval(() => {
-        progress += 5; // Faster increment to finish to 100%
-        progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
- 
-        if (progress >= 100) {
-            clearInterval(progressInterval);
-            $('#translationProgressBar').hide();  // Hide progress bar after completion
-            $('#checkImg').show();  // Show the checkmark image
-           
-            // Show "Translated!" message
-            $('#translateLabel').html('<strong>Translated!</strong>');
-            $('#translateLabel').css('color', '#28a745'); // Optional: Change color to green
-        }
-    }, 100); // Faster interval for quick completion
-}
- 
-async function startTranslation() {
-    document.getElementById("startTranslateBtn").style.visibility = "hidden";
-    const fileInput = document.getElementById('documentUpload');
-    const file = fileInput.files[0];
-    const selectedLanguages = getSelectedLanguages();
-    const userId = 1; // Assuming you have an input field for the user ID
-    let originalDocumentId = 0;
-
-    const formDataFordocument = new FormData();
-    formDataFordocument.append("file", file);
-    formDataFordocument.append("language", selectedLanguages);
-    formDataFordocument.append("user_id", userId);
-
-    try {
-        const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/upload-original-document/', {
-            method: 'POST',
-            body: formDataFordocument,
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        } else {
-            const data = await response.json(); // Parse the JSON content
-            originalDocumentId = data.document_id; // Extract the document_id
-        }
-    } catch (error) {
-        console.error('Error during the storing process:', error);
-        alert('There was an error during the original document DB storing process. Please try again.');
-        return; // Exit if there's an error
-    }
-
-    if (!file) {
-        alert("Please upload a file before starting the translation.");
-        return;
-    }
-
-    if (selectedLanguages.length === 0) {
-        alert("Please select at least one target language.");
-        return;
-    }
-
-    document.getElementById("translateLabel").style.display = 'inline';
-    startProgress();
-
-    const translatedDocuments = document.getElementById('translatedDocuments');
-    translatedDocuments.innerHTML = ''; // Clear previous download links
-
-    const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
-    const documentLinksContainer = document.createElement('div');
-    documentLinksContainer.className = 'document-links-container';
-    documentLinksContainer.style.display = 'flex';
-    documentLinksContainer.style.overflowX = 'auto';  // Enable horizontal scroll
-    documentLinksContainer.style.whiteSpace = 'nowrap';  // Prevent line breaks
-    documentLinksContainer.style.marginTop = '20px';  // Add some spacing
-
-    translatedDocuments.appendChild(documentLinksContainer);
-
-    const startTime = Date.now();
-    const promises = selectedLanguages.map(async (language) => {
-        const formData = new FormData();
-        formData.append("file", file);
-        const targetLangCode = language;
-        formData.append("target_lang", targetLangCode);
-
-        try {
-            const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/translate-document/', {
-                method: 'POST',
-                body: formData,
+            translateLabel.css({
+                'color': '#666666',
+                'margin-left': '10rem',
+                'text-align': 'center',
+                'margin-right': 'auto'
             });
-
-            if (response.ok) {
-                const blob = await response.blob();
-
-                const formDataForTranslatedDocument = new FormData();
-                formDataForTranslatedDocument.append("file", blob, `${fileNameWithoutExtension}_${language}.docx`);
-                formDataForTranslatedDocument.append("language", language);
-                formDataForTranslatedDocument.append("doc_id", originalDocumentId);
-
-                try {
-                    const storeResponse = await fetch('https://amoeba-endless-socially.ngrok-free.app/upload-translated-document/', {
-                        method: 'POST',
-                        body: formDataForTranslatedDocument,
-                    });
-
-                    if (!storeResponse.ok) {
-                        throw new Error(`HTTP error! Status: ${storeResponse.status}`);
-                    }
-
-                    console.log("Uploaded translated document to the database.");
-
-                    const downloadUrl = window.URL.createObjectURL(blob);
-
-                    // Create the document link and its corresponding time
-                    const documentSet = document.createElement('div');
-                    documentSet.className = 'document-set';
-                    documentSet.style.display = 'inline-block';
-                    documentSet.style.textAlign = 'center';
-                    documentSet.style.marginRight = '30px';  // Add gap between sets
-
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = downloadUrl;
-                    downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
-                    downloadLink.textContent = `${fileNameWithoutExtension}_${language}.docx`;
-
-                    const icon = document.createElement('img');
-                    icon.src = 'https://cdn-icons-png.flaticon.com/128/716/716935.png';
-                    icon.alt = 'Word Icon';
-                    icon.style.width = '42px';
-                    icon.style.height = '42px';
-                    icon.style.marginRight = '5px';
-
-                    downloadLink.prepend(icon);
-
-                    const translationTime = document.createElement('p');
-                    translationTime.className = 'translation-time';
-                    translationTime.textContent = `Time taken: ${formatTime(Date.now() - startTime)}`;
-
-                    // Append link and time to the set
-                    documentSet.appendChild(downloadLink);
-                    documentSet.appendChild(translationTime);
-
-                    // Add the set to the container
-                    documentLinksContainer.appendChild(documentSet);
-
-                } catch (error) {
-                    console.error('Error during the storing process:', error);
-                    alert('There was an error during the DB storing process. Please try again.');
+ 
+            console.log('Progress started...');
+ 
+            const maxFastProgress = 30; // Fast progress until 70%
+            const fastIntervalTime = 1000; // Fast update every 100 milliseconds
+            const slowIntervalTime = 200; // Slow update every 200 milliseconds
+            const fastProgressIncrement = 10; // Fast increment up to 70%
+            const slowProgressIncrement = 0.5; // Slow increment after 70%
+ 
+            progress = 0; // Reset progress
+ 
+            // Start fast progress until 70%
+            progressInterval = setInterval(() => {
+                if (progress < maxFastProgress) {
+                    progress += fastProgressIncrement;
+                    progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
+                } else {
+                    clearInterval(progressInterval); // Stop the fast interval
+ 
+                    // Start slow progress after reaching 70%
+                    progressInterval = setInterval(() => {
+                        if (progress < 90) {
+                            progress += slowProgressIncrement;
+                            progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
+                        }
+                    }, slowIntervalTime);
                 }
-            } else {
-                alert(`Failed to process the file for language: ${language}. Please try again.`);
-            }
-        } catch (error) {
-            console.error(`Error processing language ${language}:`, error);
-            alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
+            }, fastIntervalTime);
         }
-    });
-
-    await Promise.all(promises);
-
-    // Now, progress to 100% as the documents are ready
-    completeProgress();
-
-    const isSingleDocument = selectedLanguages.length === 1;
-    const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
-    const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
-
-    // Create and display the header container with the texts
-    const translationHeaderContainer = document.createElement('div');
-    translationHeaderContainer.className = 'translation-header-container';
-    translationHeaderContainer.style.textAlign = 'center';  // Center the title and message
-    translationHeaderContainer.style.marginBottom = '20px'; // Add spacing between the header and the document links
-
-    const title = document.createElement('h3');
-    title.className = 'translated-title';
-    title.textContent = translatedText;
-    title.style.marginTop = '3rem'; // Margin for spacing above the title
-
-    const readyMessage = document.createElement('div');
-    readyMessage.className = 'ready-msg';
-    readyMessage.textContent = readyMessageText;
-    readyMessage.style.marginTop = '0.01rem';
-
-    translationHeaderContainer.appendChild(title);
-    translationHeaderContainer.appendChild(readyMessage);
-
-    // Insert the header container above the translated documents container
-    translatedDocuments.parentNode.insertBefore(translationHeaderContainer, translatedDocuments);
-
-    translatedDocuments.style.display = 'block';
-    translatedDocuments.style.padding = '40px';
-    translatedDocuments.style.width = '90%';
-    translatedDocuments.style.borderRadius = '8px';
-    translatedDocuments.style.backgroundColor = '#fff';
-    translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
-    translatedDocuments.style.marginLeft = '3.5rem';
-    translatedDocuments.style.marginTop = '1rem';
-
-    // Add hover effects for the container
-    translatedDocuments.addEventListener('mouseover', function() {
-        translatedDocuments.style.backgroundColor = '#f7f7f7';
-    });
-
-    translatedDocuments.addEventListener('mouseout', function() {
-        translatedDocuments.style.backgroundColor = '#fff';
-    });
-}
-
-function formatTime(ms) {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = ((ms % 60000) / 1000).toFixed(0);
-    return `${minutes} mins ${seconds < 10 ? '0' : ''}${seconds} secs`;
-}
-
-       
-        </script>
+ 
+        function completeProgress() {
+            clearInterval(progressInterval); // Stop the slow progress
+ 
+            const progressBarInner = $('#translationProgressBar').find('.progress-bar');
+ 
+            // Fast completion to 100%
+            progressInterval = setInterval(() => {
+                progress += 5; // Faster increment to finish to 100%
+                progressBarInner.css('width', progress + '%').attr('aria-valuenow', progress).text(Math.floor(progress) + '%');
+ 
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    $('#translationProgressBar').hide();  // Hide progress bar after completion
+                    $('#checkImg').show();  // Show the checkmark image
+ 
+                    // Show "Translated!" message
+                    $('#translateLabel').html('<strong>Translated!</strong>');
+                    $('#translateLabel').css('color', '#28a745'); // Optional: Change color to green
+                }
+            }, 100); // Faster interval for quick completion
+        }
+ 
+        async function startTranslation() {
+            document.getElementById("startTranslateBtn").style.visibility = "hidden";
+            const fileInput = document.getElementById('documentUpload');
+            const file = fileInput.files[0];
+            const selectedLanguages = getSelectedLanguages();
+            const userId = 1; // Assuming you have an input field for the user ID
+            let originalDocumentId = 0;
+ 
+            const formDataFordocument = new FormData();
+            formDataFordocument.append("file", file);
+            formDataFordocument.append("language", selectedLanguages);
+            formDataFordocument.append("user_id", userId);
+ 
+            try {
+                const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/upload-original-document/', {
+                    method: 'POST',
+                    body: formDataFordocument,
+                });
+ 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                } else {
+                    const data = await response.json(); // Parse the JSON content
+                    originalDocumentId = data.document_id; // Extract the document_id
+                }
+            } catch (error) {
+                console.error('Error during the storing process:', error);
+                alert('There was an error during the original document DB storing process. Please try again.');
+                return; // Exit if there's an error
+            }
+ 
+            if (!file) {
+                alert("Please upload a file before starting the translation.");
+                return;
+            }
+ 
+            if (selectedLanguages.length === 0) {
+                alert("Please select at least one target language.");
+                return;
+            }
+ 
+            document.getElementById("translateLabel").style.display = 'inline';
+            startProgress();
+ 
+            const translatedDocuments = document.getElementById('translatedDocuments');
+            translatedDocuments.innerHTML = ''; // Clear previous download links
+ 
+            const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
+            const documentLinksContainer = document.createElement('div');
+            documentLinksContainer.className = 'document-links-container';
+            documentLinksContainer.style.display = 'flex';
+            documentLinksContainer.style.overflowX = 'auto';  // Enable horizontal scroll
+            documentLinksContainer.style.whiteSpace = 'nowrap';  // Prevent line breaks
+            documentLinksContainer.style.marginTop = '20px';  // Add some spacing
+ 
+            translatedDocuments.appendChild(documentLinksContainer);
+ 
+            const startTime = Date.now();
+            const promises = selectedLanguages.map(async (language) => {
+                const formData = new FormData();
+                formData.append("file", file);
+                const targetLangCode = language;
+                formData.append("target_lang", targetLangCode);
+ 
+                try {
+                    const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/translate-document/', {
+                        method: 'POST',
+                        body: formData,
+                    });
+ 
+                    if (response.ok) {
+                        const blob = await response.blob();
+ 
+                        const formDataForTranslatedDocument = new FormData();
+                        formDataForTranslatedDocument.append("file", blob, `${fileNameWithoutExtension}_${language}.docx`);
+                        formDataForTranslatedDocument.append("language", language);
+                        formDataForTranslatedDocument.append("doc_id", originalDocumentId);
+ 
+                        try {
+                            const storeResponse = await fetch('https://amoeba-endless-socially.ngrok-free.app/upload-translated-document/', {
+                                method: 'POST',
+                                body: formDataForTranslatedDocument,
+                            });
+ 
+                            if (!storeResponse.ok) {
+                                throw new Error(`HTTP error! Status: ${storeResponse.status}`);
+                            }
+ 
+                            console.log("Uploaded translated document to the database.");
+ 
+                            const downloadUrl = window.URL.createObjectURL(blob);
+ 
+                            // Create the document link and its corresponding time
+                            const documentSet = document.createElement('div');
+                            documentSet.className = 'document-set';
+                            documentSet.style.display = 'inline-block';
+                            documentSet.style.textAlign = 'center';
+                            documentSet.style.marginRight = '30px';  // Add gap between sets
+ 
+                            const downloadLink = document.createElement('a');
+                            downloadLink.href = downloadUrl;
+                            downloadLink.download = `${fileNameWithoutExtension}_${language}.docx`;
+                            downloadLink.textContent = `${fileNameWithoutExtension}_${language}.docx`;
+ 
+                            const icon = document.createElement('img');
+                            icon.src = 'https://cdn-icons-png.flaticon.com/128/716/716935.png';
+                            icon.alt = 'Word Icon';
+                            icon.style.width = '42px';
+                            icon.style.height = '42px';
+                            icon.style.marginRight = '5px';
+ 
+                            downloadLink.prepend(icon);
+ 
+                            const translationTime = document.createElement('p');
+                            translationTime.className = 'translation-time';
+                            translationTime.textContent = `Time taken: ${formatTime(Date.now() - startTime)}`;
+ 
+                            // Append link and time to the set
+                            documentSet.appendChild(downloadLink);
+                            documentSet.appendChild(translationTime);
+ 
+                            // Add the set to the container
+                            documentLinksContainer.appendChild(documentSet);
+ 
+                        } catch (error) {
+                            console.error('Error during the storing process:', error);
+                            alert('There was an error during the DB storing process. Please try again.');
+                        }
+                    } else {
+                        alert(`Failed to process the file for language: ${language}. Please try again.`);
+                    }
+                } catch (error) {
+                    console.error(`Error processing language ${language}:`, error);
+                    alert(`An error occurred while processing the file for language: ${language}. Please try again.`);
+                }
+            });
+ 
+            await Promise.all(promises);
+ 
+            // Now, progress to 100% as the documents are ready
+            completeProgress();
+ 
+            const isSingleDocument = selectedLanguages.length === 1;
+            const translatedText = isSingleDocument ? 'Translated Document' : 'Translated Documents';
+            const readyMessageText = isSingleDocument ? 'Your translated document is ready.' : 'Your translated documents are ready.';
+ 
+            // Create and display the header container with the texts
+            const translationHeaderContainer = document.createElement('div');
+            translationHeaderContainer.className = 'translation-header-container';
+            translationHeaderContainer.style.textAlign = 'center';  // Center the title and message
+            translationHeaderContainer.style.marginBottom = '20px'; // Add spacing between the header and the document links
+ 
+            const title = document.createElement('h3');
+            title.className = 'translated-title';
+            title.textContent = translatedText;
+            title.style.marginTop = '3rem'; // Margin for spacing above the title
+ 
+            const readyMessage = document.createElement('div');
+            readyMessage.className = 'ready-msg';
+            readyMessage.textContent = readyMessageText;
+            readyMessage.style.marginTop = '0.01rem';
+ 
+            translationHeaderContainer.appendChild(title);
+            translationHeaderContainer.appendChild(readyMessage);
+ 
+            // Insert the header container above the translated documents container
+            translatedDocuments.parentNode.insertBefore(translationHeaderContainer, translatedDocuments);
+ 
+            translatedDocuments.style.display = 'block';
+            translatedDocuments.style.padding = '40px';
+            translatedDocuments.style.width = '90%';
+            translatedDocuments.style.borderRadius = '8px';
+            translatedDocuments.style.backgroundColor = '#fff';
+            translatedDocuments.style.boxShadow = '0 1px 3px 1px rgba(0, 0, 0, .15)';
+            translatedDocuments.style.marginLeft = '3.5rem';
+            translatedDocuments.style.marginTop = '1rem';
+ 
+            // Add hover effects for the container
+            translatedDocuments.addEventListener('mouseover', function () {
+                translatedDocuments.style.backgroundColor = '#f7f7f7';
+            });
+ 
+            translatedDocuments.addEventListener('mouseout', function () {
+                translatedDocuments.style.backgroundColor = '#fff';
+            });
+        }
+ 
+        function formatTime(ms) {
+            const minutes = Math.floor(ms / 60000);
+            const seconds = ((ms % 60000) / 1000).toFixed(0);
+            return `${minutes} mins ${seconds < 10 ? '0' : ''}${seconds} secs`;
+        }
+ 
+ 
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
