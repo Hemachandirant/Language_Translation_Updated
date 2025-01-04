@@ -450,7 +450,7 @@
                 formData.append("target_lang", targetLangCode);
  
                 try {
-                    const response = await fetch('https://documenttrans-c3cceeh4c9fkabhd.canadacentral-01.azurewebsites.net/translate-document/', {
+                    const response = await fetch('http://127.0.0.1:8000/translate-document/', {
                         method: 'POST',
                         body: formData,
                     });
