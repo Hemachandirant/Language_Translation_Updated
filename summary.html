@@ -321,7 +321,7 @@ async function detectLanguage(file) {
     formData.append('file', file);
  
     try {
-        const response = await fetch('https://amoeba-endless-socially.ngrok-free.app/detect-language/', {
+        const response = await fetch('https://documenttrans-c3cceeh4c9fkabhd.canadacentral-01.azurewebsites.net/detect-language/', {
             method: 'POST',
             body: formData,
         });
@@ -503,7 +503,7 @@ translatedDocuments.appendChild(documentsContainer);
         formData.append("output_format", documentFormat); // Correct key for output format
  
         try {
-            const response = await fetch('https://endless-sailfish-funky.ngrok-free.app/upload-summarize-translate/', {
+            const response = await fetch('https://s91sn8qs-8000.usw3.devtunnels.ms/upload-summarize-translate/', {
                 method: 'POST',
                 body: formData,
             });
